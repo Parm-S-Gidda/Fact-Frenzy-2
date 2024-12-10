@@ -1,0 +1,155 @@
+
+.homeMain{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(249, 249, 249);
+    position: relative;
+    z-index: 1;
+
+    
+
+}
+
+@keyframes titleMove {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(10%); }
+    100% { transform: translateY(0); }
+  
+  }
+
+.homeTitle{
+    font-size: 10rem;
+    color: rgb(0, 0, 0);
+    animation: titleMove 2s linear infinite;
+    font-weight: 600;
+    text-align: center;
+  
+}
+
+
+
+.homebutton{
+  
+    
+    font-size: 3rem;
+    height: fit-content;
+    padding: 5% 30%;
+    border-radius: 50px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.1s ease;
+
+    background-color: rgb(212, 112, 112);
+    color: white;
+}
+
+.homebutton:hover{
+
+    transform: scale(1.05);
+    background-color: rgb(217, 84, 84);
+}
+
+#buttonDiv{
+    display: flex;
+    justify-content: center;
+    gap: 5%;
+    height: 90%;
+
+}
+
+#backgroundBlur{
+    position: fixed;
+    width: 100%;
+    min-height: 100vh;
+
+    background-color: rgba(0, 0, 0, 0.778);
+    z-index: 2;
+
+    
+    justify-content: center;
+    display: none;
+   
+    
+
+}
+
+.enterLobbyDiv{
+
+    z-index: 3;
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 50px;
+    margin-top: 15%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  
+
+    padding: 0 5%;
+
+
+}
+
+#lobbyCodeTitle{
+
+    font-size: 4rem;
+    padding: 0;
+    margin: 0;
+    padding-top: 5%;
+    
+}
+
+#lobbyCodeInput{
+    background-color: rgb(209, 210, 209);
+
+    width: 90%;
+    font-size: 2.5rem;
+    border: none;
+    border-radius: 50px;
+    padding: 2% 5%;
+    margin-top: 5%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    color: grey;
+}
+
+#joinLobbyButtonsDiv{
+    width: 100%;
+    gap: 2%;
+    display: flex;
+   
+  
+}
+
+
+.joinLobbyButtons{
+    background-color: yellow;
+    font-size: 3rem;
+    cursor: pointer;
+    background-color: rgb(212, 112, 112);
+    border-radius: 20px;
+    padding: 1% 10%;
+    width: 50%;
+    color: white;
+    margin-top: 5%;
+    margin-bottom: 3%;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.2 ease;
+}
+
+.joinLobbyButtons:hover{
+
+    transform: scale(1.05);
+    background-color: rgb(217, 84, 84);
+}
+

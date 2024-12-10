@@ -1,0 +1,233 @@
+import '../styles/lobbySettings.css';
+import { useEffect, useState } from 'react';
+import AddedQuestions from './addedQuestions';
+import { useNavigate } from 'react-router-dom';
+
+
+function LobbySettings() {
+
+    // 0 - Standard 1 - Custum 
+    const [settingChoice, setSettingChoice] = useState(0);
+
+    // 0 - 10 1 - 15 2 - 20 3 - 25
+    const [numberOfQuestionsClick, setNumberOfQuestionsClick] = useState(0)
+
+    // 0 - Easy 1 - Medium 2 - Hard
+    const [difficultyClick, setDifficultyClick] = useState(0)
+    const [questionInput, setQuestionInput] = useState('');
+    const [answerInput, setAnswerInput] = useState('');
+    const [allQuestionList, setAllQuestionList] = useState([]);
+    
+   
+  
+
+    const navigate = useNavigate();
+
+    const handleStandardClicked = () => {
+
+        setSettingChoice(0)
+    }
+
+    const handleCustomClicked = () => {
+
+        setSettingChoice(1)
+    }
+
+    const handleBackClicked = () => {
+
+        navigate('/');
+    }
+
+    const handleAmountQuestionsClicked = (value) => {
+
+        setNumberOfQuestionsClick(value)
+    }
+
+    const handleQuestionDifficultyClicked = (value) => {
+
+        setDifficultyClick(value)
+    }
+
+    const handleQuestionInput = (e) => {
+
+       
+        setQuestionInput(e.target.value)
+
+    }
+
+    const handleAnswerInput = (e) => {
+
+        setAnswerInput(e.target.value)
+    }
+
+    const handleAddClicked = () => {
+
+        if(questionInput.length <= 0){
+            alert("Question cannot be blank")
+            return;
+        }
+
+        if(answerInput.length <= 0){
+            alert("Answer cannot be blank")
+            return;
+        }
+
+        const questionPaylaod = {
+
+            Question: questionInput, 
+            Answer: answerInput,
+           
+
+        }
+
+       
+        setAllQuestionList((prevAllQuestionList) => [...prevAllQuestionList, questionPaylaod]);
+
+        setQuestionInput("")
+        setAnswerInput("")
+
+    }
+
+    const deleteEntry = (deleteIndex) => {
+
+        setAllQuestionList(prevAllQuestionList => 
+            prevAllQuestionList.filter((_, index) => index !== deleteIndex)
+          );
+
+
+    }
+
+    const handleContinueClicked = () => {
+        navigate('/lobby', { state: { isScreen: true}});
+    }
+
+
+
+
+
+
+    return (
+
+        <div className='lobbySettingsDiv'>
+
+            <div id="lobbyMain">
+
+                <h1 id='lobbySettingTitle'> Fact Frenzy</h1>
+                <h1 id='lobbySettingSubTitle'>Game Settings</h1>
+
+                <div className='lobbySettingsSub' id="standard" onClick={handleStandardClicked} style={{ border: settingChoice == 0 ? '5px solid rgb(124, 124, 125)' : 'none' }}>
+
+                    <h2 className='settingTitle'>Standard</h2>
+
+                    <div className='lineBreakSetting'></div>
+
+                    <div className='settingDiv'>
+
+                        <div className='settings'>
+
+                            <h3>Amount of Questions</h3>
+
+                            <div className='option'>
+                                <button className='settingButton' onClick={() => handleAmountQuestionsClicked(0)}  style={{backgroundColor: numberOfQuestionsClick == 0 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
+                                <h3 className='optionTitle'>10</h3>
+                            </div>
+                            <div className='option'>
+                                <button className='settingButton' onClick={() => handleAmountQuestionsClicked(1)} style={{backgroundColor: numberOfQuestionsClick == 1 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
+                                <h3 className='optionTitle'>15</h3>
+                            </div>
+                            <div className='option'>
+                                <button className='settingButton' onClick={() => handleAmountQuestionsClicked(2)} style={{backgroundColor: numberOfQuestionsClick == 2 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
+                                <h3 className='optionTitle'>20</h3>
+                            </div>
+                            <div className='option'>
+                                <button className='settingButton' onClick={() => handleAmountQuestionsClicked(3)} style={{backgroundColor: numberOfQuestionsClick == 3 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
+                                <h3 className='optionTitle'>25</h3>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div className='lineBreakSetting'></div>
+
+                    <div className='settingDiv'>
+
+                        <div className='settings'>
+
+                            <h3>Question Difficulty</h3>
+
+                            <div className='option'>
+
+                                <button className='settingButton' onClick={() => handleQuestionDifficultyClicked(0)}  style={{backgroundColor: difficultyClick == 0 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
+                                <h3 className='optionTitle'>Easy</h3>
+
+                            </div>
+
+                            <div className='option'>
+
+                                <button className='settingButton' onClick={() => handleQuestionDifficultyClicked(1)}  style={{backgroundColor: difficultyClick == 1 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
+                                <h3 className='optionTitle'>Medium</h3>
+
+                            </div>
+
+                            <div className='option'>
+
+                                <button className='settingButton' onClick={() => handleQuestionDifficultyClicked(2)}  style={{backgroundColor: difficultyClick == 2 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
+                                <h3 className='optionTitle'>Hard</h3>
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <div className='lobbySettingsSub' id="custom" onClick={handleCustomClicked} style={{ border: settingChoice == 1 ? '5px solid rgb(124, 124, 125)' : 'none' }}>
+
+                    <h2 className='settingTitle'>Custom</h2>
+
+                    <div className='lineBreakSetting'></div>
+
+                    <div id="addQuestionsDivSettings">
+
+                        <input type="text" id="questionInput" name='questionInput' placeholder="Enter Question" value={questionInput} onChange={handleQuestionInput}></input>
+                        <input type="text" id="answerInput" name='answerInput' placeholder="Enter Answer" value={answerInput} onChange={handleAnswerInput}></input>
+                        <button id="addButton" onClick={handleAddClicked}>Add</button>
+                    </div>
+
+                    <div className='lineBreakSetting'></div>
+
+                    <div id="allQuestionsDiv">
+                    {allQuestionList.map((record, index) => (
+                    <AddedQuestions key={index} record={record} index={index} deleteEntry={deleteEntry} />))}
+
+                    </div>
+
+
+
+                </div>
+
+                <div id="lobbyButtons">
+                    <button className="settingButtons" onClick={handleContinueClicked}>Continue</button>
+                    <button className="settingButtons" onClick={handleBackClicked}>Back</button>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+        </div>
+
+    );
+}
+
+export default LobbySettings;

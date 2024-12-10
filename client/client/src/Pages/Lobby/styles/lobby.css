@@ -1,0 +1,47 @@
+#userLobbyMain{
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(249, 249, 249);
+}
+
+#displayePlayers{
+    
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 50px;
+    font-size: 1.4rem;
+    line-height: 0.5;
+    padding: 2% 2%;
+    background-color: rgb(255, 255, 255);
+    width: 1000px;
+
+}
+
+#playerLobbyDiv{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 1%;
+    margin-top: 2%;
+    max-width: 1250px;
+    
+
+}
+
+#lobbyTitle{
+    font-size: 7rem;
+    margin: 0;
+    margin-top: 3%;
+    margin-bottom: 2%;
+}
+
+#lobbyCode{
+    margin: 0;
+
+    font-size: 3rem;
+    margin-bottom: 1%;
+}

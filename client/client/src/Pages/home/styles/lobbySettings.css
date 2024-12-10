@@ -1,0 +1,214 @@
+
+#lobbySettingTitle{
+    font-size: 5rem;
+    margin: 0;
+    margin-top: 1%;
+}
+
+#lobbySettingSubTitle{
+    margin: 0;
+    font-size: 2rem;
+}
+
+.lobbySettingsDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(249, 249, 249);
+    overflow-y: auto;
+    
+    
+   
+
+}
+
+#lobbyMain{
+
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    max-width: 1500px;
+}
+
+.lobbySettingsSub{
+
+    height: fit-content;
+    width: 90%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 50px;
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+#standard{
+
+    border: 5px solid rgb(124, 124, 125);
+ 
+}
+
+#custom{
+    margin-bottom: 5%;
+}
+
+.settingButtons{
+    font-size: 2rem;
+    height: fit-content;
+    padding: 1% 1%;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    width: 20%;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.1s ease;
+
+    background-color: rgb(212, 112, 112);
+    color: white;
+}
+
+.settingButtons:hover{
+
+    transform: scale(1.05);
+    background-color: rgb(217, 84, 84);
+}
+
+#lobbyButtons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3%;
+    gap: 4%;
+    width: 100%;
+}
+
+.settingTitle{
+
+    margin: 0;
+    padding: 0;
+
+    margin-top: 1%;
+    font-size: 3rem;
+    width: 100%;
+
+    height: fit-content;
+}
+
+.lobbySettingsSub{
+    display: flex;
+  
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.lineBreakSetting{
+    height: 1px;
+    width: 95%;
+    background-color: gray;
+    
+}
+
+#answerInput, #questionInput {
+
+    border: none;
+    outline: none;
+    background-color: rgb(240, 234, 234);
+    width: 30%;
+    border-radius: 50px;
+    height: fit-content;
+    padding: 1% 1%;
+    color: grey;
+    font-size: 1.2rem;
+    
+
+}
+
+#answerInput:focus, #questionInput:focus{
+    border: none;
+    outline: none;
+}
+
+#addButton{
+    border: none;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    padding: 0 2%;
+    cursor: pointer;
+}
+
+#addButton:hover{
+    background-color: rgb(210, 205, 205);
+}
+
+
+
+#addQuestionsDivSettings{
+
+    display: flex;
+    justify-content: center;
+    margin-top: 1%;
+    width: 100%;
+    gap: 1%;
+    margin-bottom: 1%;
+    
+    
+}
+
+#allQuestionsDiv{
+
+    background-color: rgb(248, 247, 247);
+    width: 93%;
+    margin-top: 1%;
+ 
+    margin-bottom: 2%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 500px;
+}
+.settingDiv{
+    width: 90%;
+    height: 100%;
+
+}
+
+.settingDiv2{
+    width: 90%;
+    background-color: red;
+}
+
+.settings{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    
+   
+ 
+}
+
+.option{
+    display: flex;
+    margin-left: 5%;
+    justify-content: center;
+    align-items: center;
+}
+
+.settingButton{
+
+    height: 50%;
+    aspect-ratio: 1 /1;
+    background-color: rgb(247, 244, 244);
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.optionTitle{
+    margin-left: 10%;
+}
