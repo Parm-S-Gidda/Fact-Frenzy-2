@@ -9,6 +9,7 @@ import NameChoose from './Pages/namechoose/components/nameChoose';
 import Screen from './Pages/screen/component/screen';
 import EndScreen from './Pages/endScreen/components/endScreen';
 import Host from './Pages/host/component/host';
+import Player from './Pages/player/components/player';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -23,6 +24,7 @@ root.render(
         <Route path="/Screen" element={<Screen />} />
         <Route path="/EndScreen" element={<EndScreen />} />
         <Route path="/Host" element={<Host />} />
+        <Route path="/Player" element={<Player />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

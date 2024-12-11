@@ -19,7 +19,8 @@ function Home() {
     //gets rid of pop up
     const handleCancleClicked = () => {
 
-        setIsFlex(false)
+        navigate('/Player')
+        //setIsFlex(false)
     }
 
     //grabs current value in input field

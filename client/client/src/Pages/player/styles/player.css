@@ -1,0 +1,52 @@
+#playerMainDiv{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(249, 249, 249);
+    width: 100%;
+
+}
+
+#playerTitle{
+
+    margin: 0;
+    margin-top: 1%;
+    font-size: 6rem;
+
+}
+
+#currentPlayerPoints{
+
+    font-size: 3rem;
+    margin: 0;
+    margin-top: 4%;
+    padding: 3% 4%;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 50px;
+    margin-bottom: 2%;
+
+}
+
+#buzzButton{
+
+    width: fit-content;
+    aspect-ratio: 2 / 1;
+    border-radius: 50px;
+    font-size: 9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background-color: rgb(212, 112, 112);
+    color: rgb(144, 38, 38);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 5px solid rgb(0, 0, 0);
+
+
+}
+
+#buzzButton:hover{
+    transform: scale(1.05);
+    background-color: rgb(217, 84, 84);
+    
+}
