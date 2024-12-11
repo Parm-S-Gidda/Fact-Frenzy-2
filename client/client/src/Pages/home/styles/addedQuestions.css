@@ -33,7 +33,7 @@
     background-color: rgb(217, 95, 95);
 }
 
-.answerDiv{
+.settingAsnwerDiv{
     border-left: 1px solid rgb(223, 217, 217);
     padding-left: 2%;
     padding-right: 2%;
@@ -45,7 +45,7 @@
     overflow-x: hidden;
 }
 
-.questionDiv{
+.settingQuestionDiv{
     border-left: 1px solid rgb(223, 217, 217);
     padding-left: 2%;
     padding-right: 2%;

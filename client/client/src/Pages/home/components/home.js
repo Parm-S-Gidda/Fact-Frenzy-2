@@ -36,7 +36,9 @@ function Home() {
     const handleJoinClicked = async (lobbyCode) => {
 
         //TO DO 
-        navigate('/SelectName')
+      //  navigate('/SelectName')
+
+      navigate('/Host')
 
     };
 

@@ -80,9 +80,88 @@
     font-size: clamp(1rem, 3.8vw, 10rem);
     font-weight: 900;
     color: rgb(217, 110, 110);
-    border: 2px solid rgb(105, 18, 18);
+    border: 1px solid rgb(105, 18, 18);
 
 }
 
+.highlightUserDiv{
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: 600;
+    margin-top: 3%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 50px;
+    background-color: rgb(255, 255, 255);
+    padding: 2% 0;
+}
+
+#screenBackgroundCorrect{
+
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.659);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+}
+
+#screenBackgroundIncorrect{
+
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.595);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+}
+
+#correctDiv{
+
+    
+    width: 12%;
+    height: 8%;
+    background-color: rgb(42, 132, 48);
+    border-radius: 30px;
+    animation: buzz 0.1s linear 1;
+    animation-fill-mode: forwards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1rem, 2.2vw, 10rem);
+    font-weight: 900;
+    color: rgb(147, 187, 153);
+    border: 1px solid rgb(19, 121, 10);
+
+}
+
+#incorrectDiv{
+
+    
+    width: 12%;
+    height: 8%;
+    background-color: rgb(216, 54, 54);
+    border-radius: 30px;
+    animation: buzz 0.1s linear 1;
+    animation-fill-mode: forwards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1rem, 1.8vw, 10rem);
+    font-weight: 900;
+    color: rgb(217, 110, 110);
+    border: 1px solid rgb(105, 18, 18);
+    
+
+
+
+}
 
 

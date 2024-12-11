@@ -7,6 +7,8 @@ import LobbySettings from './Pages/home/components/lobbySettings';
 import Lobby from './Pages/Lobby/components/lobby';
 import NameChoose from './Pages/namechoose/components/nameChoose';
 import Screen from './Pages/screen/component/screen';
+import EndScreen from './Pages/endScreen/components/endScreen';
+import Host from './Pages/host/component/host';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,8 +20,9 @@ root.render(
         <Route path="/LobbySettings" element={<LobbySettings />} />
         <Route path="/Lobby" element={<Lobby />} />
         <Route path="/SelectName" element={<NameChoose />} />
-  
         <Route path="/Screen" element={<Screen />} />
+        <Route path="/EndScreen" element={<EndScreen />} />
+        <Route path="/Host" element={<Host />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
