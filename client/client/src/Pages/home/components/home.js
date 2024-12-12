@@ -27,30 +27,51 @@ function Home() {
     const handleInputChange = (e) => {
 
         lobbyInput = e.target.value
-        console.log("input: " + lobbyInput)
+        
 
-        handleJoinClicked(lobbyInput)
+     
 
     }
 
     //make fetch request to backend to join room 
-    const handleJoinClicked = async (lobbyCode) => {
+    const handleJoinClicked = async () => {
 
-        //TO DO 
-      //  navigate('/SelectName')
+      try { 
 
-      navigate('/Host')
+        const response = await fetch(`http://127.0.0.1:8080/joinLobby?key=${lobbyInput}`);
+
+        if( !response.ok){
+            alert("Could not join game, please try again later")
+        }
+
+        const data = await response.text();
+
+        if(data === "DNE"){
+            alert("Lobby Doesn't Exist")
+            return;
+        }
+
+        console.log("respone: " + data)
+
+        navigate('/SelectName', { state: { roomKey: lobbyInput}})
+
+    }
+    catch (error){
+
+        console.log(error.message)
+    }
+
 
     };
 
     //will make request to back end lobby code
-    const handleHostGameClicked = async (lobbyCode) => {
+    const handleHostGameClicked = async () => {
 
-        navigate('/LobbySettings');
-        /*
+       
+        
         try { 
 
-            const response = await fetch("http://127.0.0.1:8080/createLobby")
+            const response = await fetch("http://127.0.0.1:8080/createRoom")
 
             if( !response.ok){
                 alert("Could not make lobby, please try again later")
@@ -58,9 +79,9 @@ function Home() {
 
             const data = await response.text();
 
-            console.log("respone: " + data)
+       
 
-            navigate('/LobbySettings');
+            navigate('/LobbySettings', { state: { roomKey: parseInt(data)}});
 
         }
         catch (error){
@@ -68,7 +89,7 @@ function Home() {
             console.log(error.message)
         }
 
-        */
+        
        
     }
 
@@ -83,14 +104,14 @@ function Home() {
 
         <div id="buttonDiv">
             <button className="homebutton" onClick={handleHostGameClicked}>Host Game</button>
-            <button className="homebutton"  onClick={handleJoinLobbyClicked}>Join Lobby</button>
+            <button className="homebutton"  onClick={handleJoinLobbyClicked}>Join Game</button>
         </div>
 
         <div id="backgroundBlur" style={{ display: isFlex ? 'flex' : 'none' }}>
 
             <div className="enterLobbyDiv">
 
-                <h2 id="lobbyCodeTitle">Enter Lobby Code</h2>
+                <h2 id="lobbyCodeTitle">Enter Game Code</h2>
                 <input type="text" id="lobbyCodeInput" name='lobbyCodeInput' placeholder="i.e. 5" onChange={handleInputChange}></input>
 
                 <div  id="joinLobbyButtonsDiv">

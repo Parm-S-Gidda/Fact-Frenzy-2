@@ -1,11 +1,14 @@
 import '../styles/nameChoose.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 function NameChoose() {
 
     const [userName, setUserName] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+    const {roomKey} = location.state || {};
 
 
     const handleBackClicked = () => {
@@ -18,14 +21,41 @@ function NameChoose() {
       
     }
 
-    const handleJoinClicked = () => {
+    const handleJoinClicked = async () => {
 
         if(userName.length <= 0){
             alert("Please input a valid username")
             return;
         }
 
-        navigate('/Lobby')
+
+        try {
+
+            const response = await fetch('http://127.0.0.1:8080/' + roomKey + '/addUser', {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ roomKey: roomKey, userName: userName }),
+            });
+
+            if (!response.ok) {
+                alert("Could not join game, please try again later")
+            }
+
+            const data = await response.json();
+
+            console.log("All Players: " + data)
+
+    
+            navigate('/Lobby', { state: {isScreen:false, roomKey: roomKey, userName: userName, playerList:data}})
+        }
+        catch (error) {
+
+            console.log(error.message)
+        }
+
+       
     }
 
   return (

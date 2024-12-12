@@ -1,7 +1,7 @@
 import '../styles/lobbySettings.css';
 import { useEffect, useState } from 'react';
 import AddedQuestions from './addedQuestions';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation} from 'react-router-dom';
 
 
 function LobbySettings() {
@@ -17,8 +17,9 @@ function LobbySettings() {
     const [questionInput, setQuestionInput] = useState('');
     const [answerInput, setAnswerInput] = useState('');
     const [allQuestionList, setAllQuestionList] = useState([]);
+    const location = useLocation();
     
-   
+    const {roomKey} = location.state || {};
   
 
     const navigate = useNavigate();
@@ -98,7 +99,7 @@ function LobbySettings() {
     }
 
     const handleContinueClicked = () => {
-        navigate('/lobby', { state: { isScreen: true}});
+        navigate('/lobby', { state: { isScreen: true, roomKey}});
     }
 
 
