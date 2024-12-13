@@ -12,6 +12,7 @@ function Host() {
     const navigate = useNavigate();
     const location = useLocation();
     const { stompClient} = useWebSocket();
+    const [userBuzzed, setUserBuzzed] = useState("");
 
     const {roomKey, userName} = location.state || {};
 
@@ -25,7 +26,18 @@ function Host() {
     //Show question 
     const handleRevealClicked = () => {
 
+        let payload = {
+
+            host: "N/A",
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/revealQuestion", {}, JSON.stringify(payload));
+
         setHostState(1);
+
+
     }
 
     //Display answer + no one gets a point
@@ -55,7 +67,8 @@ function Host() {
       
         
         let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
-      
+        let buzzSubscription = stompClient.subscribe("/room/" + roomKey + "/buzz", handleReceivedMessage);
+
         let payload = {
 
             host: "N/A",
@@ -68,6 +81,7 @@ function Host() {
         return () => {
             
             questionAnswerSubscription.unsubscribe();
+            buzzSubscription.unsubscribe();
          
         };
     }, []);
@@ -85,6 +99,13 @@ function Host() {
         setQuestion(payload.questionAnswer[0])
         setAnswer(payload.questionAnswer[1])
 
+      }
+      else if(command === "buzz"){
+
+        console.log("buzzl;sfkj: " + payload.buzzUser)
+        setUserBuzzed(payload.buzzUser);
+        setHostState(2)
+        
       }
 
    
@@ -118,7 +139,7 @@ function Host() {
          <>
             <div id='previewDiv'>
                 <h1 id='nextQuestionPreview'>Displayed Question:</h1>
-                <h1 id='nextQuestion'>What is 10 + 10?</h1> 
+                <h1 id='nextQuestion'>{question}</h1> 
             </div>
     
 
@@ -130,17 +151,17 @@ function Host() {
  
             <div id='previewDiv'>
                 <h1 id='nextQuestionPreview'>Displayed Question:</h1>
-                <h1 id='nextQuestion'>What is 10 + 10?</h1> 
+                <h1 id='nextQuestion'>{question}</h1> 
             </div>
             <div id='previewAnswerDiv'>
                 <h1 id='nextQuestionPreview'>Answer:</h1>
-                <h1 id='nextQuestion'>20</h1> 
+                <h1 id='nextQuestion'>{answer}</h1> 
             </div>
     
 
            <div id="rightOrWrongButtonsDiv">
 
-                <h1>Parm's answer was:</h1>
+                <h1>{userBuzzed}'s answer was:</h1>
 
                 <div id="rightWrongSubDiv">
 

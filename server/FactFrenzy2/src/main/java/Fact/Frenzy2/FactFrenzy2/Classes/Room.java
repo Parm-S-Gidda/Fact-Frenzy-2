@@ -18,6 +18,7 @@ public class Room {
     private int totalQuestions;
     private int currentQuestion;
     private int currentGameState;
+    private boolean someoneBuzzed;
 
     public Room(Long roomKey){
         this.roomKey = roomKey;
@@ -28,6 +29,7 @@ public class Room {
         //this.totalQuestions = 0;
         this.currentQuestion = 0;
         this.currentGameState = 0;
+        this.someoneBuzzed = false;
 
         this.questions = new ArrayList<>(Arrays.asList(
                 "What is 10 + 10?",
@@ -154,6 +156,18 @@ public class Room {
         return tempAnswer;
 
 
+    }
+
+    public int getQuestionIndex(){
+        return currentQuestion;
+    }
+
+    public boolean getSomeoneBuzzed(){
+        return someoneBuzzed;
+    }
+
+    public void setSomeoneBuzzed(boolean someoneBuzzed){
+        this.someoneBuzzed = someoneBuzzed;
     }
 
 }

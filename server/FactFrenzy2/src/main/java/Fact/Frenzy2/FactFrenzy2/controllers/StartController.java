@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import Fact.Frenzy2.FactFrenzy2.Classes.Room;
+import Fact.Frenzy2.FactFrenzy2.Classes.buzz;
 import Fact.Frenzy2.FactFrenzy2.Classes.players;
 import Fact.Frenzy2.FactFrenzy2.Classes.startObject;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -144,13 +145,70 @@ public class StartController {
 
         ArrayList<String> questionAnswer =  new ArrayList<String>();
 
+
+        int currentQuestionIndex = currentRoom.getQuestionIndex();
         questionAnswer.add(currentRoom.getCurrentQuestion());
         questionAnswer.add(currentRoom.getCurrentAnswer());
 
         System.out.println(questionAnswer);
 
         messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/answersAndQuestions",
-                Map.of("questionAnswer", questionAnswer, "command", "setQuestionAndAnswer"));
+                Map.of("questionAnswer", questionAnswer, "command", "setQuestionAndAnswer", "questionIndex", currentQuestionIndex));
+
+
+
+    }
+
+    @MessageMapping("/{roomKey}/revealQuestion")
+    public void revealQuestion(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Sending Request to reveal Questions: " + currentRoomKey);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        currentRoom.setCurrentGameState(1);
+
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/revealQuestion",
+                Map.of("command", "revealQuestion"));
+
+
+
+    }
+
+    @MessageMapping("/{roomKey}/buzzIn")
+    public void buzzIn(@RequestBody buzz data){
+
+        Long currentRoomKey = data.getRoomKey();
+        String currentUserName = data.getUserName();
+        int questionIndex = data.getQuestionIndex();
+
+        System.out.println("Buzz In user: " + currentUserName);
+        System.out.println("Buzz In index: " + questionIndex);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        if(currentRoom.getSomeoneBuzzed()){
+            return;
+        }
+
+        if(questionIndex != currentRoom.getQuestionIndex()-1){
+            return;
+        }
+
+        if(currentRoom.getCurrentGameState() != 1){
+            return;
+        }
+
+        currentRoom.setCurrentGameState(2);
+
+        currentRoom.setSomeoneBuzzed(true);
+
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/buzz",
+                Map.of("command", "buzz", "buzzUser", currentUserName));
 
 
 

@@ -19,20 +19,25 @@ function Screen() {
     const { isScreen, roomKey, host} = location.state || {};
     const { stompClient} = useWebSocket();
     const navigate = useNavigate(0);
+    const [question, setQuestion] = useState("");
+    const [userBuzzed, setUserBuzzed] = useState("");
+    
+  
 
 
-    const tempClick = () => {
+    const buzzAnimation = (buzzUser) => {
 
-      //  setIsFlexBuzz((prevIsFlex) => !prevIsFlex)
+        setUserBuzzed(buzzUser)
 
-        //setTimeout(() => {
+        setIsFlexBuzz((prevIsFlex) => !prevIsFlex)
+
+        setTimeout(() => {
 
 
-          //  setIsFlexBuzz(false);
-            //setScreenState(2)
+            setIsFlexBuzz(false);
+            setScreenState(2)
 
-           // navigate('/EndScreen')
-        //}, 1500); 
+        }, 1500); 
 
 
     }
@@ -41,7 +46,10 @@ function Screen() {
       
         
         let scoresSubscription = stompClient.subscribe("/room/" + roomKey + "/scores", handleReceivedMessage);
-      
+        let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
+        let revealSubscription = stompClient.subscribe("/room/" + roomKey + "/revealQuestion", handleReceivedMessage);
+        let buzzSubscription = stompClient.subscribe("/room/" + roomKey + "/buzz", handleReceivedMessage);
+
         let payload = {
 
             host: "N/A",
@@ -54,6 +62,9 @@ function Screen() {
         return () => {
             
             scoresSubscription.unsubscribe();
+            questionAnswerSubscription.unsubscribe();
+            revealSubscription.unsubscribe();
+            buzzSubscription.unsubscribe();
          
         };
     }, []);
@@ -69,6 +80,19 @@ function Screen() {
       if(command === "setScores"){
 
         setPlayerScores(payload.playerScores);
+      }
+      else if(command === "setQuestionAndAnswer"){
+
+        setQuestion(payload.questionAnswer[0])
+    
+      }
+      else if(command === "revealQuestion"){
+
+        setScreenState(1);
+      }
+      else if(command === "buzz"){
+
+        buzzAnimation(payload.buzzUser);
       }
   
 
@@ -86,7 +110,7 @@ function Screen() {
 
   return (
 
-      <div id="screenMainDiv" onClick={tempClick}>
+      <div id="screenMainDiv">
 
           <h1 id="screenTitle">Fact Frenzy</h1>
 
@@ -106,7 +130,7 @@ function Screen() {
         {screenSate === 1 &&  
         
         <>
-            <div className="questionDiv">What is 10 + 10?</div>
+            <div className="questionDiv">{question}</div>
               <div id="scoreListDiv">
                   {Object.entries(playerScores).map(([player, score], index) => (
                       <h2 className='userScores' key={index}>
@@ -120,8 +144,8 @@ function Screen() {
         {screenSate === 2 && 
         
         <>
-            <div className="questionDiv">What is 10 + 10?</div>
-            <div className="highlightUserDiv">What is the answer Parm?</div>
+            <div className="questionDiv">{question}</div>
+            <div className="highlightUserDiv">What is the answer {userBuzzed}?</div>
 
         </>
         

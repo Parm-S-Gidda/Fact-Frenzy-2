@@ -1,11 +1,73 @@
 import '../styles/player.css';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, data  } from 'react-router-dom';
+import { useWebSocket } from '../../../webSocket.js';
 
 function Player() {
 
-    const [userName, setUserName] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+    const { stompClient} = useWebSocket();
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const {roomKey, userName} = location.state || {};
+    const [userBuzzed, setUserBuzzed] = useState("");
+
+    const handleBuzzClicked = () => {
+
+      
+      let payload = {
+
+        roomKey: roomKey,
+        questionIndex: questionIndex,
+        userName: userName
+        
+      }
+
+    stompClient.send('/app/' + roomKey + "/buzzIn", {}, JSON.stringify(payload));
+
+
+    }
+
+    useEffect(() => {
+      
+        
+      let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
+    
+
+      let payload = {
+
+          host: "N/A",
+          roomKey: roomKey
+          
+        }
+
+     
+
+      return () => {
+          
+          questionAnswerSubscription.unsubscribe();
+     
+       
+      };
+  }, []);
+
+  const handleReceivedMessage = (message) => {
+
+
+
+    const payload = JSON.parse(message.body);
+
+    let { command} = payload;
+
+    if(command === "setQuestionAndAnswer"){
+
+      setQuestionIndex(payload.questionIndex)
+
+    }
+ 
+
+ 
+  }
 
 
 
@@ -18,7 +80,7 @@ function Player() {
 
         <h1 id="currentPlayerPoints">0</h1>
 
-        <button id="buzzButton">BUZZ</button>
+        <button id="buzzButton" onClick={handleBuzzClicked}>BUZZ</button>
 
     </div>
    
