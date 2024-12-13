@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import Fact.Frenzy2.FactFrenzy2.Classes.Room;
 import Fact.Frenzy2.FactFrenzy2.Classes.players;
+import Fact.Frenzy2.FactFrenzy2.Classes.startObject;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
@@ -90,6 +91,68 @@ public class StartController {
         System.out.println(updatedPlayerList);
 
         return updatedPlayerList;
+
+    }
+
+
+    @MessageMapping("/{roomKey}/start")
+    public void startGame(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+        String currentHost = data.getHost();
+
+        System.out.println("Host Name: " + currentHost);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        currentRoom.setHostName(currentHost);
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/start",
+                Map.of("hostName", currentHost, "command", "startGame"));
+
+
+        currentRoom.removeUserName(currentHost);
+
+    }
+
+    @MessageMapping("/{roomKey}/scores")
+    public void getScores(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Getting Scores for Room: " + currentRoomKey);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        Map<String, Integer> allScores =  currentRoom.getScores();
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/scores",
+                Map.of("playerScores", allScores, "command", "setScores"));
+
+
+
+    }
+
+    @MessageMapping("/{roomKey}/answersAndQuestions")
+    public void getQuestionAndAnswer(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Getting Question & Answer for Room: " + currentRoomKey);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        ArrayList<String> questionAnswer =  new ArrayList<String>();
+
+        questionAnswer.add(currentRoom.getCurrentQuestion());
+        questionAnswer.add(currentRoom.getCurrentAnswer());
+
+        System.out.println(questionAnswer);
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/answersAndQuestions",
+                Map.of("questionAnswer", questionAnswer, "command", "setQuestionAndAnswer"));
+
+
 
     }
 

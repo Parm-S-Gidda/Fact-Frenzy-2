@@ -3,6 +3,7 @@ package Fact.Frenzy2.FactFrenzy2.Classes;
 import com.mongodb.DBObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,12 +22,26 @@ public class Room {
     public Room(Long roomKey){
         this.roomKey = roomKey;
         this.players = new ArrayList<>();
-        this.questions = new ArrayList<>();
-        this.answers = new ArrayList<>();
+       // this.questions = new ArrayList<>();
+       // this.answers = new ArrayList<>();
         this.scores = new HashMap<>();
-        this.totalQuestions = 0;
+        //this.totalQuestions = 0;
         this.currentQuestion = 0;
         this.currentGameState = 0;
+
+        this.questions = new ArrayList<>(Arrays.asList(
+                "What is 10 + 10?",
+                "What is the colour of the sky?",
+                "What is 5 * 5?"
+        ));
+
+        this.answers = new ArrayList<>(Arrays.asList(
+                "20",
+                "Blue",
+                "25"
+        ));
+
+        this.totalQuestions = 3;
     }
 
 
@@ -114,9 +129,6 @@ public class Room {
 
     }
 
-    public int getCurrnetQuestion(){
-        return currentQuestion;
-    }
 
     public int getTotalQuestions(){
         return totalQuestions;
@@ -128,6 +140,20 @@ public class Room {
 
     public int getCurrentGameState(){
         return currentGameState;
+    }
+
+    public String getCurrentQuestion(){
+        return questions.get(currentQuestion);
+    }
+
+    public String getCurrentAnswer(){
+
+        String tempAnswer = answers.get(currentQuestion);
+        currentQuestion++;
+
+        return tempAnswer;
+
+
     }
 
 }

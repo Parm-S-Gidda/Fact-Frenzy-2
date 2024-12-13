@@ -1,6 +1,7 @@
 import '../styles/screen.css';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useWebSocket } from '../../../webSocket.js';
 
 
 
@@ -9,27 +10,73 @@ import { useNavigate } from 'react-router-dom';
 function Screen() {
 
     // 0 - Wait for host 1 - Question Displayed 2 - User Answer
-    const [screenSate, setScreenState] = useState(1);
+    const [screenSate, setScreenState] = useState(0);
     const [isFlexBuzz, setIsFlexBuzz] = useState(false);
     const [isFlexCorrect, setIsFlexCorrect] = useState(false);
     const [isFlexIncorrect, setIsFlexIncorrect] = useState(false);
+    const [playerScores, setPlayerScores] = useState({});
+    const location = useLocation();
+    const { isScreen, roomKey, host} = location.state || {};
+    const { stompClient} = useWebSocket();
     const navigate = useNavigate(0);
 
 
     const tempClick = () => {
 
-        setIsFlexBuzz((prevIsFlex) => !prevIsFlex)
+      //  setIsFlexBuzz((prevIsFlex) => !prevIsFlex)
 
-        setTimeout(() => {
-
-
-            setIsFlexBuzz(false);
-            setScreenState(2)
-
-            navigate('/EndScreen')
-        }, 1500); 
+        //setTimeout(() => {
 
 
+          //  setIsFlexBuzz(false);
+            //setScreenState(2)
+
+           // navigate('/EndScreen')
+        //}, 1500); 
+
+
+    }
+
+    useEffect(() => {
+      
+        
+        let scoresSubscription = stompClient.subscribe("/room/" + roomKey + "/scores", handleReceivedMessage);
+      
+        let payload = {
+
+            host: "N/A",
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/scores", {}, JSON.stringify(payload));
+
+        return () => {
+            
+            scoresSubscription.unsubscribe();
+         
+        };
+    }, []);
+  
+    const handleReceivedMessage = (message) => {
+  
+  
+  
+      const payload = JSON.parse(message.body);
+  
+      let { command} = payload;
+
+      if(command === "setScores"){
+
+        setPlayerScores(payload.playerScores);
+      }
+  
+
+  
+        
+  
+  
+      
     }
    
 
@@ -39,24 +86,34 @@ function Screen() {
 
   return (
 
-    <div id="screenMainDiv" onClick={tempClick}>
+      <div id="screenMainDiv" onClick={tempClick}>
 
-        <h1 id="screenTitle">Fact Frenzy</h1>
+          <h1 id="screenTitle">Fact Frenzy</h1>
 
-        {screenSate === 0 &&  <div className="questionDiv">Wait for host to display next question</div>}
+          {screenSate === 0 &&
+              <>
+                  <div className="questionDiv">Wait for host to display next question</div>
+                  <div id="scoreListDiv">
+                      {Object.entries(playerScores).map(([player, score], index) => (
+                          <h2 className='userScores' key={index}>
+                              {player}: {score}
+                          </h2>
+                      ))}
+                  </div>
+              </>
+        }
 
         {screenSate === 1 &&  
         
         <>
             <div className="questionDiv">What is 10 + 10?</div>
-            <div id="scoreListDiv">
-                <h1 className='userScores'>Parm: 0</h1>
-                <h1 className='userScores'>Eric: 0</h1>
-                <h1 className='userScores'>Lou: 0</h1>
-                <h1 className='userScores'>Gelo: 0</h1>
-                <h1 className='userScores'>Cathy: 0</h1>
-
-            </div>
+              <div id="scoreListDiv">
+                  {Object.entries(playerScores).map(([player, score], index) => (
+                      <h2 className='userScores' key={index}>
+                          {player}: {score}
+                      </h2>
+                  ))}
+              </div>
         </>
         }
 

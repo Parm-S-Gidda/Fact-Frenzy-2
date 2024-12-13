@@ -14,7 +14,7 @@ import { WebSocketProvider } from './webSocket.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+
     <WebSocketProvider>
       <BrowserRouter>
         <Routes>
@@ -29,6 +29,6 @@ root.render(
         </Routes>
       </BrowserRouter>
     </WebSocketProvider>
-  </React.StrictMode>
+ 
 );
 

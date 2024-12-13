@@ -1,6 +1,6 @@
 import '../styles/lobby.css';
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation  } from 'react-router-dom';
+import { useNavigate, useLocation, data  } from 'react-router-dom';
 import { useWebSocket } from '../../../webSocket.js';
 
 function Lobby() {
@@ -42,8 +42,22 @@ function Lobby() {
 
     const startClicked = () => {
 
-      stompClient.send('/app/hello', {}, JSON.stringify({ message: 'bbb' }));
-     // navigate('/Screen')
+      if(players.length < 2){
+        alert("Must have at least 2 players in the lobby before starting!")
+        return;
+      }
+
+      let payload = {
+
+        host: players[0],
+        roomKey: roomKey
+        
+      }
+
+      stompClient.send('/app/' + roomKey + "/start", {}, JSON.stringify(payload));
+
+
+      navigate('/Screen', { state: {isScreen:true, roomKey: roomKey, host: players[0]}})
     }
 
     useEffect(() => {
@@ -53,17 +67,17 @@ function Lobby() {
        
        setPlayers(playerList);
       }
-      else{
-        setPlayers(["Waiting For Players..."]);
-      }
+   
     
 
       setLobbyCode(roomKey);
       let playersSubscription = stompClient.subscribe("/room/" + roomKey + "/players", handleReceivedMessage);
+      let startSubScription = stompClient.subscribe("/room/" + roomKey + "/start", handleReceivedMessage);
       
       return () => {
           
         playersSubscription.unsubscribe();
+        startSubScription.unsubscribe();
       };
   }, []);
 
@@ -73,10 +87,23 @@ function Lobby() {
 
     const payload = JSON.parse(message.body);
 
-    let { command, playerList} = payload;
+    let { command} = payload;
 
     if(command === "updatePlayers"){
-      setPlayers(playerList)
+      setPlayers(payload.playerList)
+    }
+    else if(command === "startGame"){
+
+      let hostName = payload.hostName;
+
+      if(hostName === userName){
+        navigate('/Host', { state: {isScreen:false, isHost:true, roomKey: roomKey, userName: userName}})
+      }
+      else{
+        navigate('/Player', { state: {isScreen:false, isHost:false, roomKey: roomKey, userName: userName}})
+      }
+
+     
     }
 
 
@@ -94,8 +121,16 @@ function Lobby() {
         <div id="displayePlayers">
 
           {players.map((player, index) => (
-            <h2 key={index}>{player}</h2>
+
+
+            index == 0 ? (<h2 key={index}>{player} 👑</h2>) : (<h2 key={index}>{player} </h2>) 
+
+            
+
+
           ))}
+
+          {players.length === 0 && (<h2> Waiting for players to join</h2>)}
 
         </div>
 

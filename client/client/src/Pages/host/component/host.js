@@ -1,6 +1,8 @@
 import '../styles/host.css';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, data  } from 'react-router-dom';
+import { useWebSocket } from '../../../webSocket.js';
+
 
 
 
@@ -8,10 +10,17 @@ import { useNavigate } from 'react-router-dom';
 
 function Host() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { stompClient} = useWebSocket();
+
+    const {roomKey, userName} = location.state || {};
 
     // 0 - Reveal Next Question 1 - Question Displayed + Skip 
     // 2 - Someone Buzzed + Right Or Wrong 3 - Question skipped + show right answer
     const [hostState, setHostState] = useState(0);
+
+    const [question, setQuestion] = useState("");
+    const [answer, setAnswer] = useState("");
 
     //Show question 
     const handleRevealClicked = () => {
@@ -42,6 +51,45 @@ function Host() {
         setHostState(0)
     }
 
+    useEffect(() => {
+      
+        
+        let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
+      
+        let payload = {
+
+            host: "N/A",
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
+
+        return () => {
+            
+            questionAnswerSubscription.unsubscribe();
+         
+        };
+    }, []);
+  
+    const handleReceivedMessage = (message) => {
+  
+  
+  
+      const payload = JSON.parse(message.body);
+  
+      let { command} = payload;
+
+      if(command === "setQuestionAndAnswer"){
+
+        setQuestion(payload.questionAnswer[0])
+        setAnswer(payload.questionAnswer[1])
+
+      }
+
+   
+    }
+
 
 
 
@@ -58,7 +106,7 @@ function Host() {
          <>
             <div id='previewDiv'>
                 <h1 id='nextQuestionPreview'>Next Question Preview:</h1>
-                <h1 id='nextQuestion'>What is 10 + 10?</h1> 
+                <h1 id='nextQuestion'>{question}</h1> 
             </div>
     
 
