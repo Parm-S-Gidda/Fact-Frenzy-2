@@ -11,6 +11,7 @@ import EndScreen from './Pages/endScreen/components/endScreen';
 import Host from './Pages/host/component/host';
 import Player from './Pages/player/components/player';
 import { WebSocketProvider } from './webSocket.js';
+import ScreenLeft from './Pages/screenLeft/components/screenLeft.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -26,6 +27,7 @@ root.render(
           <Route path="/EndScreen" element={<EndScreen />} />
           <Route path="/Host" element={<Host />} />
           <Route path="/Player" element={<Player />} />
+          <Route path="/ScreenLeft" element={<ScreenLeft />} />
         </Routes>
       </BrowserRouter>
     </WebSocketProvider>

@@ -42,6 +42,40 @@ function Screen() {
 
     }
 
+    const correctAnimation = (buzzUser) => {
+
+       
+
+        setIsFlexCorrect((prevIsFlex) => !prevIsFlex)
+
+        setTimeout(() => {
+
+
+            setIsFlexCorrect(false);
+            setScreenState(0)
+
+        }, 1500); 
+
+        
+    }
+
+    const incorrectAnimation = (buzzUser) => {
+
+       
+
+        setIsFlexIncorrect((prevIsFlex) => !prevIsFlex)
+
+        setTimeout(() => {
+
+
+            setIsFlexIncorrect(false);
+            setScreenState(0)
+
+        }, 1500); 
+
+    
+    }
+
     useEffect(() => {
       
         
@@ -49,6 +83,9 @@ function Screen() {
         let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
         let revealSubscription = stompClient.subscribe("/room/" + roomKey + "/revealQuestion", handleReceivedMessage);
         let buzzSubscription = stompClient.subscribe("/room/" + roomKey + "/buzz", handleReceivedMessage);
+        let correctIncorrectSubscription = stompClient.subscribe("/room/" + roomKey + "/correctIncorrect", handleReceivedMessage);
+        let continueSubscription = stompClient.subscribe("/room/" + roomKey + "/continue", handleReceivedMessage);
+        let endGameSubscription = stompClient.subscribe("/room/" + roomKey + "/endGameForEveryone", handleReceivedMessage);
 
         let payload = {
 
@@ -65,7 +102,10 @@ function Screen() {
             questionAnswerSubscription.unsubscribe();
             revealSubscription.unsubscribe();
             buzzSubscription.unsubscribe();
-         
+            correctIncorrectSubscription.unsubscribe();
+            continueSubscription.unsubscribe();
+            endGameSubscription.unsubscribe();
+   
         };
     }, []);
   
@@ -94,6 +134,27 @@ function Screen() {
 
         buzzAnimation(payload.buzzUser);
       }
+      else if(command === "correct"){
+
+        correctAnimation(payload.buzzUser);
+
+        setPlayerScores(payload.playerScores);
+      }
+      else if(command === "incorrect"){
+
+        incorrectAnimation(payload.buzzUser);
+
+        setPlayerScores(payload.playerScores);
+      }
+      else if(command === "continue"){
+
+        setScreenState(0);
+      }
+      else if(command === "endGame"){
+
+        navigate('/EndScreen', { state: {roomKey: roomKey, isScreen:isScreen}})
+      }
+      
   
 
   

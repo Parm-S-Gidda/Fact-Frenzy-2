@@ -2,10 +2,7 @@ package Fact.Frenzy2.FactFrenzy2.Classes;
 
 import com.mongodb.DBObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Room {
 
@@ -168,6 +165,44 @@ public class Room {
 
     public void setSomeoneBuzzed(boolean someoneBuzzed){
         this.someoneBuzzed = someoneBuzzed;
+    }
+
+    public List<String> getListedScore(){
+
+        List<String> orderedList = scores.entrySet()
+                .stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .map(entry -> entry.getKey() + ": " + entry.getValue())
+                .toList();
+
+
+        return orderedList;
+    }
+
+    public String getWinner(){
+
+
+        return Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
+
+
+    }
+
+    public boolean isTie(String userName){
+
+        int value = scores.get(userName);
+
+        int count = 0;
+        for (int v : scores.values()) {
+            if (v == value) {
+                count++;
+            }
+            if (count > 1) {
+                return true;
+            }
+        }
+        return false;
+
+
     }
 
 }

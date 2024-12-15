@@ -1,0 +1,43 @@
+#screenLeftMain{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: rgb(249, 249, 249);
+}
+
+#screenLeftTitle{
+
+    font-size: 6rem;
+    margin: 0;
+    margin-top: 1%;
+}
+
+#screenLeftMessage{
+
+    font-weight: 700;
+    margin-top: 3%;
+}
+
+#screenLeftReturn{
+    font-size: 2rem;
+    height: fit-content;
+    width: 20%;
+    padding: 2% 2%;
+    border-radius: 50px;
+    cursor: pointer;
+    max-width: 500px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.1s ease;
+
+    background-color: rgb(212, 112, 112);
+    color: white;
+    
+}
+
+#screenLeftReturn:hover{
+    transform: scale(1.05);
+    background-color: rgb(217, 84, 84);
+}

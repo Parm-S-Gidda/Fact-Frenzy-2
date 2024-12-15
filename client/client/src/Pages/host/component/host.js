@@ -13,6 +13,7 @@ function Host() {
     const location = useLocation();
     const { stompClient} = useWebSocket();
     const [userBuzzed, setUserBuzzed] = useState("");
+    const [gameEnd, setGameEnd] = useState(false);
 
     const {roomKey, userName} = location.state || {};
 
@@ -43,11 +44,30 @@ function Host() {
     //Display answer + no one gets a point
     const handleSkipClicked = () => {
 
+        let payload = {
+
+            host: userBuzzed,
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/skip", {}, JSON.stringify(payload));
+
         setHostState(3);
     }
 
     //Give buzzed user a point and return to wait for display answer screen
     const handleCorrectClicked = () => {
+
+        let payload = {
+
+            host: userBuzzed,
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/correctClicked", {}, JSON.stringify(payload));
+        stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
 
         setHostState(0)
     }
@@ -55,12 +75,45 @@ function Host() {
     //Remove point from buzzed user and return to wait for display answer screen
     const handleIncorrectClicked = () => {
 
+        let payload = {
+
+            host: userBuzzed,
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/incorrectClicked", {}, JSON.stringify(payload));
+        stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
+
         setHostState(0)
     }
 
     //return to wait for display answer screen
     const handleContinueClicked = () => {
+
+        let payload = {
+
+            host: userBuzzed,
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/continue", {}, JSON.stringify(payload));
+        stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
         setHostState(0)
+    }
+
+    const handleWinnerClicked = () =>{
+
+        let payload = {
+
+            host: "N/A",
+            roomKey: roomKey
+            
+          }
+
+        stompClient.send('/app/' + roomKey + "/endGameForEveryone", {}, JSON.stringify(payload));
+        navigate('/EndScreen', { state: {roomKey: roomKey, isScreen:false}})
     }
 
     useEffect(() => {
@@ -68,6 +121,7 @@ function Host() {
         
         let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
         let buzzSubscription = stompClient.subscribe("/room/" + roomKey + "/buzz", handleReceivedMessage);
+        let endGameSubscription = stompClient.subscribe("/room/" + roomKey + "/endGame", handleReceivedMessage);
 
         let payload = {
 
@@ -82,6 +136,7 @@ function Host() {
             
             questionAnswerSubscription.unsubscribe();
             buzzSubscription.unsubscribe();
+            endGameSubscription.unsubscribe();
          
         };
     }, []);
@@ -102,9 +157,13 @@ function Host() {
       }
       else if(command === "buzz"){
 
-        console.log("buzzl;sfkj: " + payload.buzzUser)
         setUserBuzzed(payload.buzzUser);
         setHostState(2)
+        
+      }
+      else if(command === "endGame"){
+
+        setHostState(4);
         
       }
 
@@ -175,17 +234,28 @@ function Host() {
          <>
             <div id='previewDiv'>
                 <h1 id='nextQuestionPreview'>Displayed Question:</h1>
-                <h1 id='nextQuestion'>What is 10 + 10?</h1> 
+                <h1 id='nextQuestion'>{question}</h1> 
             </div>
             <div id='previewAnswerDiv'>
                 <h1 id='nextQuestionPreview'>Answer:</h1>
-                <h1 id='nextQuestion'>20</h1> 
+                <h1 id='nextQuestion'>{answer}</h1> 
             </div>
     
 
             <button id="continueButton" onClick={handleContinueClicked}>Continue</button>
         </>
         }
+        {hostState === 4 && 
+         <>
+            <div id='previewDiv'>
+                <h1 id='nextQuestionPreview'>No more questions</h1>
+            </div>
+    
+
+            <button id="revealNextQuestionButton" onClick={handleWinnerClicked}>Reveal Winner</button>
+        </>
+        }
+        
        
 
 

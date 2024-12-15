@@ -1,6 +1,7 @@
 package Fact.Frenzy2.FactFrenzy2.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -107,12 +108,13 @@ public class StartController {
         Room currentRoom = allRooms.get(currentRoomKey);
 
         currentRoom.setHostName(currentHost);
+        currentRoom.removeUserName(currentHost);
 
         messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/start",
                 Map.of("hostName", currentHost, "command", "startGame"));
 
 
-        currentRoom.removeUserName(currentHost);
+
 
     }
 
@@ -147,13 +149,22 @@ public class StartController {
 
 
         int currentQuestionIndex = currentRoom.getQuestionIndex();
-        questionAnswer.add(currentRoom.getCurrentQuestion());
-        questionAnswer.add(currentRoom.getCurrentAnswer());
 
-        System.out.println(questionAnswer);
+        if(currentQuestionIndex >= currentRoom.getTotalQuestions()){
 
-        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/answersAndQuestions",
-                Map.of("questionAnswer", questionAnswer, "command", "setQuestionAndAnswer", "questionIndex", currentQuestionIndex));
+            messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/endGame",
+                    Map.of("command", "endGame"));
+        }
+        else{
+
+            questionAnswer.add(currentRoom.getCurrentQuestion());
+            questionAnswer.add(currentRoom.getCurrentAnswer());
+
+            messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/answersAndQuestions",
+                    Map.of("questionAnswer", questionAnswer, "command", "setQuestionAndAnswer", "questionIndex", currentQuestionIndex));
+
+        }
+
 
 
 
@@ -170,6 +181,7 @@ public class StartController {
 
         currentRoom.setCurrentGameState(1);
 
+        currentRoom.setSomeoneBuzzed(false);
 
         messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/revealQuestion",
                 Map.of("command", "revealQuestion"));
@@ -213,6 +225,150 @@ public class StartController {
 
 
     }
+
+    @MessageMapping("/{roomKey}/correctClicked")
+    public void correctClicked(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+        String buzzUser = data.getHost();
+
+        System.out.println("Giving Point to: " + buzzUser);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        currentRoom.increaseScore(buzzUser);
+
+        Map<String, Integer> allScores =  currentRoom.getScores();
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/correctIncorrect",
+                Map.of("buzzUser", buzzUser, "command", "correct", "playerScores", allScores));
+
+
+        currentRoom.setCurrentGameState(0);
+
+    }
+
+    @MessageMapping("/{roomKey}/incorrectClicked")
+    public void incorrectClicked(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+        String buzzUser = data.getHost();
+
+        System.out.println("Giving Point to: " + buzzUser);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        currentRoom.decreaseScore(buzzUser);
+
+        Map<String, Integer> allScores =  currentRoom.getScores();
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/correctIncorrect",
+                Map.of("buzzUser", buzzUser, "command", "incorrect", "playerScores", allScores));
+
+
+        currentRoom.setCurrentGameState(0);
+
+    }
+
+    @MessageMapping("/{roomKey}/skip")
+    public void skip(@RequestBody startObject data){
+
+
+
+        Long currentRoomKey = data.getRoomKey();
+
+
+        System.out.println("Skip Clicked No one can buzz now");
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        currentRoom.setSomeoneBuzzed(true);
+
+
+    }
+
+    @MessageMapping("/{roomKey}/continue")
+    public void continueToLobbyZero(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Continue Clicked Going back to lobby state 0");
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        currentRoom.setCurrentGameState(0);
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/continue",
+                Map.of("command", "continue"));
+
+
+
+
+    }
+
+    @MessageMapping("/{roomKey}/endGameForEveryone")
+    public void endGameForEveryone(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Continue Clicked Going back to lobby state 0");
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        currentRoom.setCurrentGameState(0);
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/endGameForEveryone",
+                Map.of("command", "endGame"));
+
+
+
+
+    }
+
+    @MessageMapping("/{roomKey}/endScreenValues")
+    public void endScreenValues(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Getting end Screen Values");
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        List<String> playersScores = currentRoom.getListedScore();
+
+        String winner = currentRoom.getWinner();
+
+        if(currentRoom.isTie(winner)){
+
+            messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/finalScores",
+                    Map.of("command", "tie", "scores", playersScores));
+
+        }
+        else{
+            messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/finalScores",
+                    Map.of("command", "winner", "scores", playersScores, "winner", winner));
+        }
+
+    }
+
+    @MessageMapping("/{roomKey}/screenLeft")
+    public void screenLeft(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Screen Left, deleting room");
+
+        allRooms.remove(currentRoomKey);
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/screenLeft",
+                Map.of("command", "screenLeft"));
+
+
+
+
+    }
+
+
 
 
 

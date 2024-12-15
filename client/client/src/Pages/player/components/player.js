@@ -10,7 +10,7 @@ function Player() {
     const { stompClient} = useWebSocket();
     const [questionIndex, setQuestionIndex] = useState(0);
     const {roomKey, userName} = location.state || {};
-    const [userBuzzed, setUserBuzzed] = useState("");
+ 
 
     const handleBuzzClicked = () => {
 
@@ -32,20 +32,15 @@ function Player() {
       
         
       let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
-    
+      let endGameSubscription = stompClient.subscribe("/room/" + roomKey + "/endGameForEveryone", handleReceivedMessage);
 
-      let payload = {
-
-          host: "N/A",
-          roomKey: roomKey
-          
-        }
 
      
 
       return () => {
           
           questionAnswerSubscription.unsubscribe();
+          endGameSubscription.unsubscribe();
      
        
       };
@@ -63,6 +58,10 @@ function Player() {
 
       setQuestionIndex(payload.questionIndex)
 
+    }
+    else if(command === "endGame"){
+
+      navigate('/EndScreen', { state: {roomKey: roomKey, isScreen:false}})
     }
  
 

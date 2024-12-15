@@ -2,6 +2,7 @@ import '../styles/home.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 function Home() {
 
     const [isFlex, setIsFlex] = useState(false)
@@ -19,8 +20,8 @@ function Home() {
     //gets rid of pop up
     const handleCancleClicked = () => {
 
-        navigate('/Player')
-        //setIsFlex(false)
+       
+        setIsFlex(false)
     }
 
     //grabs current value in input field
@@ -42,6 +43,7 @@ function Home() {
 
         if( !response.ok){
             alert("Could not join game, please try again later")
+            return;
         }
 
         const data = await response.text();

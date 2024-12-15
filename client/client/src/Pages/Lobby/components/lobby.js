@@ -13,32 +13,49 @@ function Lobby() {
     
     
 
-    const handleLeaveClicked = async() => {
+  const handleLeaveClicked = async () => {
 
-        
+    if (!isScreen) {
+
       try {
 
         const response = await fetch('http://127.0.0.1:8080/' + roomKey + '/removeUser', {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ roomKey: roomKey, userName: userName }),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ roomKey: roomKey, userName: userName }),
         });
 
         if (!response.ok) {
-            alert("Could not join game, please try again later")
+          alert("Could not leave game, please try again");
+          return;
         }
 
-  
+
         navigate('/')
-    }
-    catch (error) {
+      }
+      catch (error) {
 
         console.log(error.message)
+      }
+
     }
-       
+    else{
+
+      let payload = {
+
+        host: "N/A",
+        roomKey: roomKey
+        
+      }
+
+      stompClient.send('/app/' + roomKey + "/screenLeft", {}, JSON.stringify(payload));
+
+
+      navigate('/')
     }
+  }
 
     const startClicked = () => {
 
@@ -73,11 +90,13 @@ function Lobby() {
       setLobbyCode(roomKey);
       let playersSubscription = stompClient.subscribe("/room/" + roomKey + "/players", handleReceivedMessage);
       let startSubScription = stompClient.subscribe("/room/" + roomKey + "/start", handleReceivedMessage);
-      
+      let screenLeftSubscription = stompClient.subscribe("/room/" + roomKey + "/screenLeft", handleReceivedMessage);
+
       return () => {
           
         playersSubscription.unsubscribe();
         startSubScription.unsubscribe();
+        screenLeftSubscription.unsubscribe();
       };
   }, []);
 
@@ -104,6 +123,13 @@ function Lobby() {
       }
 
      
+    }
+    else if(command === "screenLeft"){
+
+      if(!isScreen){
+        navigate('/ScreenLeft')
+      }
+   
     }
 
 
