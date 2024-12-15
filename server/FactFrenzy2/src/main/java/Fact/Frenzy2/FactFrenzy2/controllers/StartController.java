@@ -3,13 +3,11 @@ package Fact.Frenzy2.FactFrenzy2.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import Fact.Frenzy2.FactFrenzy2.Classes.Room;
-import Fact.Frenzy2.FactFrenzy2.Classes.buzz;
-import Fact.Frenzy2.FactFrenzy2.Classes.players;
-import Fact.Frenzy2.FactFrenzy2.Classes.startObject;
+import Fact.Frenzy2.FactFrenzy2.Classes.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
@@ -362,6 +360,36 @@ public class StartController {
 
         messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/screenLeft",
                 Map.of("command", "screenLeft"));
+
+
+
+
+    }
+
+    @MessageMapping("/{roomKey}/setSettings")
+    public void setSettings(@RequestBody settings data){
+
+        Long currentRoomKey = data.getRoomKey();
+        String type = data.getType();
+
+        System.out.println("Setting settings for " + currentRoomKey);
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+
+        System.out.println("Setting settings");
+
+        if(Objects.equals(type, "custom")){
+
+            System.out.println("Setting Custom Questions/answers" + data.getQuestions());
+            currentRoom.setAllQuestionsCustom(data.getQuestions());
+            currentRoom.setAllAnswerCustom(data.getAnswers());
+        }
+
+
+
+
+
 
 
 

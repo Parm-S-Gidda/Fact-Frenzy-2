@@ -20,14 +20,15 @@ public class Room {
     public Room(Long roomKey){
         this.roomKey = roomKey;
         this.players = new ArrayList<>();
-       // this.questions = new ArrayList<>();
-       // this.answers = new ArrayList<>();
+        this.questions = new ArrayList<>();
+        this.answers = new ArrayList<>();
         this.scores = new HashMap<>();
-        //this.totalQuestions = 0;
+        this.totalQuestions = 0;
         this.currentQuestion = 0;
         this.currentGameState = 0;
         this.someoneBuzzed = false;
 
+        /*
         this.questions = new ArrayList<>(Arrays.asList(
                 "What is 10 + 10?",
                 "What is the colour of the sky?",
@@ -41,6 +42,8 @@ public class Room {
         ));
 
         this.totalQuestions = 3;
+
+         */
     }
 
 

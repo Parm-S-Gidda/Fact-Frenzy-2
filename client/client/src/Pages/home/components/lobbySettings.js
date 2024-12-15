@@ -2,11 +2,12 @@ import '../styles/lobbySettings.css';
 import { useEffect, useState } from 'react';
 import AddedQuestions from './addedQuestions';
 import { useNavigate, useLocation} from 'react-router-dom';
+import { useWebSocket } from '../../../webSocket.js';
 
 
 function LobbySettings() {
 
-    // 0 - Standard 1 - Custum 
+    // 0 - Standard 1 - Custom 
     const [settingChoice, setSettingChoice] = useState(0);
 
     // 0 - 10 1 - 15 2 - 20 3 - 25
@@ -18,6 +19,7 @@ function LobbySettings() {
     const [answerInput, setAnswerInput] = useState('');
     const [allQuestionList, setAllQuestionList] = useState([]);
     const location = useLocation();
+    const { stompClient} = useWebSocket();
     
     const {roomKey} = location.state || {};
   
@@ -99,7 +101,44 @@ function LobbySettings() {
     }
 
     const handleContinueClicked = () => {
-        navigate('/lobby', { state: { isScreen: true, roomKey}});
+
+
+        
+
+        if(settingChoice === 0){
+
+
+           // navigate('/lobby', { state: { isScreen: true, roomKey}});
+
+        }
+        else{
+            
+            const questions = allQuestionList.map(record => record.Question);
+            const answers = allQuestionList.map(record => record.Answer);
+
+            let payload = {
+
+                questions: questions,
+                answers: answers,
+                type: "custom",
+                roomKey:roomKey
+                
+              }
+        
+              stompClient.send('/app/' + roomKey + "/setSettings", {}, JSON.stringify(payload));
+
+
+            navigate('/lobby', { state: { isScreen: true, roomKey, questions:questions, answers:answers}});
+
+
+
+
+        }
+
+
+
+
+      
     }
 
 
