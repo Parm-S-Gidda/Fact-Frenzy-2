@@ -35,7 +35,12 @@ function EndScreen() {
 
     useEffect(() => {
       
-        
+        if(!stompClient){
+          console.log("Web Socket Not connected yet");
+          return;
+        }
+
+        console.log("web socket connected");
         let finalScoreSubscription = stompClient.subscribe("/room/" + roomKey + "/finalScores", handleReceivedMessage);
        
   
@@ -54,7 +59,7 @@ function EndScreen() {
             finalScoreSubscription.unsubscribe();
          
         };
-    }, []);
+    }, [stompClient]);
   
     const handleReceivedMessage = (message) => {
   

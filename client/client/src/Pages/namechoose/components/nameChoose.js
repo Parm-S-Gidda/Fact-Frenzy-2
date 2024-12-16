@@ -31,7 +31,7 @@ function NameChoose() {
 
         try {
 
-            const response = await fetch('https://fact-frenzy-service-993031554602.us-west1.run.app/' + roomKey + '/addUser', {
+            const response = await fetch('http://127.0.0.1:8080/' + roomKey + '/addUser', {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',

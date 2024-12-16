@@ -77,6 +77,13 @@ function Screen() {
     }
 
     useEffect(() => {
+
+      if(!stompClient){
+        console.log("Web Socket Not connected yet");
+        return;
+      }
+
+      console.log("web socket connected");
       
         
         let scoresSubscription = stompClient.subscribe("/room/" + roomKey + "/scores", handleReceivedMessage);
@@ -107,7 +114,7 @@ function Screen() {
             endGameSubscription.unsubscribe();
    
         };
-    }, []);
+    }, [stompClient]);
   
     const handleReceivedMessage = (message) => {
   
