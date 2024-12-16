@@ -398,16 +398,48 @@ public class StartController {
             System.out.println("Setting Standard: " + data.getAmount() + ", " + data.getDifficulty());
             currentRoom.setAnswersAndQuestions(data.getDifficulty(), data.getAmount(), this.questionRepo);
         }
+    }
 
+    @MessageMapping("/{roomKey}/playerRefresh")
+    public void userRefresh(@RequestBody startObject data){
 
+        Long currentRoomKey = data.getRoomKey();
 
+        System.out.println("Refreshing user");
 
+        Room currentRoom = allRooms.get(currentRoomKey);
 
+        Map<String, Integer> allScores =  currentRoom.getScores();
+
+        int questionIndex = currentRoom.getQuestionIndex() -1;
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/playerRefresh",
+                Map.of("command", "playerRefresh", "questionIndex", questionIndex, "scores", allScores));
 
 
 
 
     }
+
+    @MessageMapping("/{roomKey}/lobbyRefresh")
+    public void lobbyRefresh(@RequestBody startObject data){
+
+        Long currentRoomKey = data.getRoomKey();
+
+        System.out.println("Refreshing Lobby");
+
+        Room currentRoom = allRooms.get(currentRoomKey);
+
+        ArrayList<String> allPlayers = currentRoom.getAllPlayers();
+
+        messagingTemplate.convertAndSend("/room/" + currentRoomKey + "/lobbyRefresh",
+                Map.of("command", "lobbyRefresh", "allPlayers", allPlayers));
+
+
+
+
+    }
+
 
 
 

@@ -56,6 +56,10 @@ public class Room {
         return players;
     }
 
+    public ArrayList<String> getAllPlayers(){
+        return players;
+    }
+
     public ArrayList<String> getAllQuestions(boolean isCustom, int difficulty, int amount){
 
         return questions;

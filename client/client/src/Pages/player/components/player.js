@@ -38,12 +38,20 @@ function Player() {
 
       console.log("web socket connected");
       
-        
+      let playerRefreshSubscription = stompClient.subscribe("/room/" + roomKey + "/playerRefresh", handleReceivedMessage);
       let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
       let endGameSubscription = stompClient.subscribe("/room/" + roomKey + "/endGameForEveryone", handleReceivedMessage);
       let scoresSubscription = stompClient.subscribe("/room/" + roomKey + "/scores", handleReceivedMessage);
       let correctIncorrectSubscription = stompClient.subscribe("/room/" + roomKey + "/correctIncorrect", handleReceivedMessage);
      
+      let payload = {
+
+        roomKey: roomKey,
+        userName: "N/A"
+        
+      }
+
+    stompClient.send('/app/' + roomKey + "/playerRefresh", {}, JSON.stringify(payload));
 
       return () => {
           
@@ -51,6 +59,7 @@ function Player() {
           endGameSubscription.unsubscribe();
           scoresSubscription.unsubscribe();
           correctIncorrectSubscription.unsubscribe();
+          playerRefreshSubscription.unsubscribe();
      
        
       };
@@ -79,6 +88,13 @@ function Player() {
 
       setScore(allScores[userName]);
       
+    }
+    else if(command === "playerRefresh"){
+
+      let allScores = payload.scores;
+
+      setScore(allScores[userName]);
+      setQuestionIndex(payload.questionIndex)
     }
  
 
