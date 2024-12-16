@@ -85,12 +85,23 @@ function Lobby() {
       }
 
       console.log("web socket connected");
+
+
       
       if(!isScreen){
 
        
        setPlayers(playerList);
       }
+
+      let payload = {
+
+        host: "N/A",
+        roomKey: roomKey
+        
+      }
+
+     
    
     
 
@@ -98,12 +109,16 @@ function Lobby() {
       let playersSubscription = stompClient.subscribe("/room/" + roomKey + "/players", handleReceivedMessage);
       let startSubScription = stompClient.subscribe("/room/" + roomKey + "/start", handleReceivedMessage);
       let screenLeftSubscription = stompClient.subscribe("/room/" + roomKey + "/screenLeft", handleReceivedMessage);
+      let lobbyRefreshSubscription = stompClient.subscribe("/room/" + roomKey + "/lobbyRefresh", handleReceivedMessage);
+
+      stompClient.send('/app/' + roomKey + "/lobbyRefresh", {}, JSON.stringify(payload));
 
       return () => {
           
         playersSubscription.unsubscribe();
         startSubScription.unsubscribe();
         screenLeftSubscription.unsubscribe();
+        lobbyRefreshSubscription.unsubscribe();
       };
   }, [stompClient]);
 
@@ -137,6 +152,10 @@ function Lobby() {
         navigate('/ScreenLeft')
       }
    
+    }
+    else if(command === "lobbyRefresh"){
+
+      setPlayers(payload.allPlayers)
     }
 
 
