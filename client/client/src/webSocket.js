@@ -8,7 +8,7 @@ export const WebSocketProvider = ({ children }) => {
 
   const [stompClient, setStompClient] = useState(null);
 
-  const url = 'http://localhost:8080/connect';
+  const url = 'https://fact-frenzy-service-993031554602.us-west1.run.app/connect';
 
   useEffect(() => {
 
