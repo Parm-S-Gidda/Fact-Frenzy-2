@@ -8,11 +8,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import Fact.Frenzy2.FactFrenzy2.Classes.*;
+import Fact.Frenzy2.FactFrenzy2.repository.questionRepo;
+import Fact.Frenzy2.FactFrenzy2.services.questionService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.mongodb.DBObject;
+
 
 @RestController
 @CrossOrigin
@@ -20,6 +24,10 @@ public class StartController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+
+    @Autowired
+    private questionRepo questionRepo;
 
 
     private final AtomicLong masterRoomKey = new AtomicLong();
@@ -384,6 +392,11 @@ public class StartController {
             System.out.println("Setting Custom Questions/answers" + data.getQuestions());
             currentRoom.setAllQuestionsCustom(data.getQuestions());
             currentRoom.setAllAnswerCustom(data.getAnswers());
+        }
+        else{
+
+            System.out.println("Setting Standard: " + data.getAmount() + ", " + data.getDifficulty());
+            currentRoom.setAnswersAndQuestions(data.getDifficulty(), data.getAmount(), this.questionRepo);
         }
 
 

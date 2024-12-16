@@ -94,7 +94,9 @@ function EndScreen() {
 
         <h1 id="endScreenTitle">Fact Frenzy</h1>
 
-        <h1 id='endScreenWinner'>{winner} Wins!</h1>
+        {winner === "Tie" && <h1 id='endScreenWinner'>Tie!</h1>}
+        {winner != "Tie" && <h1 id='endScreenWinner'>{winner} Wins!</h1>}
+        
 
         <div id="endScreenScoreDiv">
 

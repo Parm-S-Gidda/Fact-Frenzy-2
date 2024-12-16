@@ -1,6 +1,10 @@
 package Fact.Frenzy2.FactFrenzy2.Classes;
 
-import com.mongodb.DBObject;
+
+
+import Fact.Frenzy2.FactFrenzy2.modal.question;
+import Fact.Frenzy2.FactFrenzy2.repository.questionRepo;
+import Fact.Frenzy2.FactFrenzy2.services.questionService;
 
 import java.util.*;
 
@@ -17,6 +21,7 @@ public class Room {
     private int currentGameState;
     private boolean someoneBuzzed;
 
+
     public Room(Long roomKey){
         this.roomKey = roomKey;
         this.players = new ArrayList<>();
@@ -28,22 +33,8 @@ public class Room {
         this.currentGameState = 0;
         this.someoneBuzzed = false;
 
-        /*
-        this.questions = new ArrayList<>(Arrays.asList(
-                "What is 10 + 10?",
-                "What is the colour of the sky?",
-                "What is 5 * 5?"
-        ));
 
-        this.answers = new ArrayList<>(Arrays.asList(
-                "20",
-                "Blue",
-                "25"
-        ));
 
-        this.totalQuestions = 3;
-
-         */
     }
 
 
@@ -80,10 +71,20 @@ public class Room {
         this.answers = answers;
     }
 
-    public void setAnswersAndQuestions(int difficulty, int amount){
 
-        //this.questions = pull quesions from DB
-        //this.answers = pull answers from DB
+
+
+
+    public void setAnswersAndQuestions(int difficulty, int amount, questionRepo questionRepo){
+
+        List<question> allQuestions = questionRepo.findRandomQuestionsByDifficulty(difficulty, amount);
+
+        this.totalQuestions = allQuestions.size();
+
+        for (question q : allQuestions) {
+            this.questions.add(q.getQuestion());
+            this.answers.add(q.getAnswer());
+        }
     }
 
     public void setRoomKey(Long key){

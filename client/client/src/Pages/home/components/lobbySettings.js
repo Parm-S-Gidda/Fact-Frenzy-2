@@ -107,14 +107,48 @@ function LobbySettings() {
 
         if(settingChoice === 0){
 
+            let amount = 0;
 
-           // navigate('/lobby', { state: { isScreen: true, roomKey}});
+            if(numberOfQuestionsClick === 0){
+                amount = 10;
+            }
+            else if(numberOfQuestionsClick === 1){
+
+                amount = 15;
+            }
+            else if(numberOfQuestionsClick === 2){
+                amount = 20;
+            }
+            else if(numberOfQuestionsClick === 3){
+                amount = 25;
+            }
+
+
+            let payload = {
+
+                type: "standard",
+                roomKey:roomKey,
+                difficulty:difficultyClick,
+                amount:amount
+                
+              }
+        
+              stompClient.send('/app/' + roomKey + "/setSettings", {}, JSON.stringify(payload));
+
+
+
+            navigate('/lobby', { state: { isScreen: true, roomKey}});
 
         }
         else{
             
             const questions = allQuestionList.map(record => record.Question);
             const answers = allQuestionList.map(record => record.Answer);
+
+            if(answers.length <= 0){
+                alert("Must add at least 1 question before continuing");
+                return;
+            }
 
             let payload = {
 
