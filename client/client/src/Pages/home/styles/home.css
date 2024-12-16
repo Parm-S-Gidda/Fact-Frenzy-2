@@ -120,6 +120,7 @@
     margin-top: 5%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     color: grey;
+    outline: none;
 }
 
 #joinLobbyButtonsDiv{
@@ -152,4 +153,51 @@
     transform: scale(1.05);
     background-color: rgb(217, 84, 84);
 }
+
+@media (max-width: 450px) {
+   
+    .homeTitle{
+
+        font-size: 4rem;
+    }
+
+    .homebutton{
+
+        font-size: 1.5rem;
+        width: fit-content;
+        
+    }
+
+    #buttonDiv{
+        flex-direction: column;
+        width: 90%;
+        align-items: center;
+        justify-content:flex-start;
+        margin-top: 5%;
+    }
+
+    .enterLobbyDiv{
+        width: 85%;
+        
+    }
+
+    #lobbyCodeTitle{
+        font-size: 2rem;
+    }
+
+    #lobbyCodeInput{
+        font-size: 1.5rem;
+    }
+
+    .joinLobbyButtons{
+        font-size: 1.5rem;
+        
+    }
+
+    #joinLobbyButtonsDiv{
+        margin-bottom: 3%;
+    }
+
+   
+  }
 

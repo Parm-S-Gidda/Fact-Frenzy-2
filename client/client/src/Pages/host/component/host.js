@@ -220,7 +220,7 @@ function Host() {
 
            <div id="rightOrWrongButtonsDiv">
 
-                <h1>{userBuzzed}'s answer was:</h1>
+                <h1 id="answerWasTitle">{userBuzzed}'s answer was:</h1>
 
                 <div id="rightWrongSubDiv">
 

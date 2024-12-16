@@ -50,3 +50,26 @@
     background-color: rgb(217, 84, 84);
     
 }
+
+@media (max-width: 450px) {
+
+    #playerTitle{
+        font-size: 3rem;
+    }
+
+    #buzzButton{
+
+        aspect-ratio: 1 / 1;
+        width: 95%;
+        font-size: 7rem;
+        margin-top: 5%;
+        text-align: center;
+    }
+
+    #buzzButton:hover{
+        transform: none;
+       
+    }
+
+    
+}

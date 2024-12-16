@@ -74,3 +74,25 @@
     background-color: rgb(217, 84, 84);
 
 }
+
+@media (max-width: 450px) {
+    #endScreenTitle{
+        font-size: 3rem;
+    }
+
+    #endScreenWinner{
+
+        font-size: 3rem;
+        text-align: center;
+    }
+
+    #endScreenScoreDiv{
+        width: 95%;
+        margin-bottom: 5%;
+    }
+
+    #endScreenScoreTitle{
+        font-size: 2rem;
+        margin-top: 2%;
+    }
+}

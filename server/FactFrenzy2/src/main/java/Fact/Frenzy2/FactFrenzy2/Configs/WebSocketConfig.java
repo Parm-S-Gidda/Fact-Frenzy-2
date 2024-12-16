@@ -16,7 +16,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         //connection must say connect
         registry.addEndpoint("/connect")
-                .setAllowedOrigins("http://localhost:3000")
+                .setAllowedOrigins("http://localhost:3000", "https://fact-frenzy-2.web.app/", "https://fact-frenzy-2.firebaseapp.com/")
                 .withSockJS();
     }
 

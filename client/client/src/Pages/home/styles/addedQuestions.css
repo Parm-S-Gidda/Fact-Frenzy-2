@@ -59,3 +59,13 @@
 
 
 }
+
+@media (max-width: 450px) {
+
+
+    .settingAsnwerDiv, .settingQuestionDiv{
+        font-size: 0.9rem;
+    }
+
+  
+}

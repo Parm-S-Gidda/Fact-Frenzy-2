@@ -10,6 +10,7 @@ function Player() {
     const { stompClient} = useWebSocket();
     const [questionIndex, setQuestionIndex] = useState(0);
     const {roomKey, userName} = location.state || {};
+    const [score, setScore] = useState(0);
  
 
     const handleBuzzClicked = () => {
@@ -33,14 +34,16 @@ function Player() {
         
       let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
       let endGameSubscription = stompClient.subscribe("/room/" + roomKey + "/endGameForEveryone", handleReceivedMessage);
-
-
+      let scoresSubscription = stompClient.subscribe("/room/" + roomKey + "/scores", handleReceivedMessage);
+      let correctIncorrectSubscription = stompClient.subscribe("/room/" + roomKey + "/correctIncorrect", handleReceivedMessage);
      
 
       return () => {
           
           questionAnswerSubscription.unsubscribe();
           endGameSubscription.unsubscribe();
+          scoresSubscription.unsubscribe();
+          correctIncorrectSubscription.unsubscribe();
      
        
       };
@@ -63,6 +66,13 @@ function Player() {
 
       navigate('/EndScreen', { state: {roomKey: roomKey, isScreen:false}})
     }
+    else if(command === "setScores" || command === "incorrect" || command === "correct"){
+
+      let allScores = payload.playerScores;
+
+      setScore(allScores[userName]);
+      
+    }
  
 
  
@@ -77,7 +87,7 @@ function Player() {
 
         <h1 id="playerTitle">Fact Frenzy</h1>
 
-        <h1 id="currentPlayerPoints">0</h1>
+        <h1 id="currentPlayerPoints">{score}</h1>
 
         <button id="buzzButton" onClick={handleBuzzClicked}>BUZZ</button>
 

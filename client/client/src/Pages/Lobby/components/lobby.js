@@ -19,7 +19,7 @@ function Lobby() {
 
       try {
 
-        const response = await fetch('http://127.0.0.1:8080/' + roomKey + '/removeUser', {
+        const response = await fetch('https://fact-frenzy-service-993031554602.us-west1.run.app/' + roomKey + '/removeUser', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ function Lobby() {
           {players.map((player, index) => (
 
 
-            index == 0 ? (<h2 key={index}>{player} 👑</h2>) : (<h2 key={index}>{player} </h2>) 
+            index == 0 ? (<h2 className='playerNamesLobby' key={index}>{player} 👑</h2>) : (<h2 className='playerNamesLobby' key={index}>{player} </h2>) 
 
             
 

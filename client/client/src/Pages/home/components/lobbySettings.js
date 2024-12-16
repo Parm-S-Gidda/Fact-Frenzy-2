@@ -199,7 +199,7 @@ function LobbySettings() {
 
                         <div className='settings'>
 
-                            <h3>Amount of Questions</h3>
+                            <h3 className="subSettingTitle">Amount of Questions</h3>
 
                             <div className='option'>
                                 <button className='settingButton' onClick={() => handleAmountQuestionsClicked(0)}  style={{backgroundColor: numberOfQuestionsClick == 0 ? 'rgb(139, 134, 134)': 'rgb(247, 244, 244)'}}></button>
@@ -229,7 +229,7 @@ function LobbySettings() {
 
                         <div className='settings'>
 
-                            <h3>Question Difficulty</h3>
+                            <h3 className="subSettingTitle">Question Difficulty</h3>
 
                             <div className='option'>
 
