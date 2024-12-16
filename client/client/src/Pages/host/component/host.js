@@ -118,7 +118,12 @@ function Host() {
 
     useEffect(() => {
       
-        
+      if(!stompClient){
+        console.log("Web Socket Not connected yet");
+        return;
+      }
+
+      console.log("web socket connected");
         let questionAnswerSubscription = stompClient.subscribe("/room/" + roomKey + "/answersAndQuestions", handleReceivedMessage);
         let buzzSubscription = stompClient.subscribe("/room/" + roomKey + "/buzz", handleReceivedMessage);
         let endGameSubscription = stompClient.subscribe("/room/" + roomKey + "/endGame", handleReceivedMessage);
@@ -139,7 +144,7 @@ function Host() {
             endGameSubscription.unsubscribe();
          
         };
-    }, []);
+    }, [stompClient]);
   
     const handleReceivedMessage = (message) => {
   

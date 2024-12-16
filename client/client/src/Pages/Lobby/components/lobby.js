@@ -19,7 +19,7 @@ function Lobby() {
 
       try {
 
-        const response = await fetch('https://fact-frenzy-service-993031554602.us-west1.run.app/' + roomKey + '/removeUser', {
+        const response = await fetch('http://127.0.0.1:8080/' + roomKey + '/removeUser', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -78,6 +78,13 @@ function Lobby() {
     }
 
     useEffect(() => {
+
+      if(!stompClient){
+        console.log("Web Socket Not connected yet");
+        return;
+      }
+
+      console.log("web socket connected");
       
       if(!isScreen){
 
@@ -98,7 +105,7 @@ function Lobby() {
         startSubScription.unsubscribe();
         screenLeftSubscription.unsubscribe();
       };
-  }, []);
+  }, [stompClient]);
 
   const handleReceivedMessage = (message) => {
 

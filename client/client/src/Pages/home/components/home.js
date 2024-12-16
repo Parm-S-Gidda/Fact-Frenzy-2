@@ -39,7 +39,7 @@ function Home() {
 
       try { 
 
-        const response = await fetch(`https://fact-frenzy-service-993031554602.us-west1.run.app/joinLobby?key=${lobbyInput}`);
+        const response = await fetch(`http://127.0.0.1:8080/joinLobby?key=${lobbyInput}`);
 
         if( !response.ok){
             alert("Could not join game, please try again later")
@@ -73,7 +73,7 @@ function Home() {
         
         try { 
 
-            const response = await fetch("https://fact-frenzy-service-993031554602.us-west1.run.app/createRoom")
+            const response = await fetch("http://127.0.0.1:8080/createRoom")
 
             if( !response.ok){
                 alert("Could not make lobby, please try again later")
