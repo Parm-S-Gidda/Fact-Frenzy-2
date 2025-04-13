@@ -1,7 +1,13 @@
 import '../styles/screen.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useWebSocket } from '../../../webSocket.js';
+import correctSound from '../../../sounds/correct.wav';
+import incorrectSound from '../../../sounds/incorrect.wav';
+import dingSound from '../../../sounds/ding.wav';
+import musicSound from '../../../sounds/music.mp3';
+import clockSound from '../../../sounds/clock.wav';
+import revealSound from '../../../sounds/reveal.wav';
 
 
 
@@ -20,12 +26,29 @@ function Screen() {
     const { stompClient} = useWebSocket();
     const navigate = useNavigate(0);
     const [question, setQuestion] = useState("");
+    const [answer, setAnswer] = useState("");
     const [userBuzzed, setUserBuzzed] = useState("");
-    
-  
+    const correctNoise = new Audio(correctSound);  
+    const incorrectNoise = new Audio(incorrectSound);  
+    const dingNoise = new Audio(dingSound);  
+    const musicNoise = new Audio(musicSound); 
+    const clockNoise = new Audio(clockSound);  
+    const revealNoise = new Audio(revealSound);  
+    let audioOn = useRef(false);
 
 
     const buzzAnimation = (buzzUser) => {
+
+   
+
+        if(audioOn){
+
+
+     
+          dingNoise.play();
+        }
+        
+        
 
         setUserBuzzed(buzzUser)
 
@@ -35,7 +58,16 @@ function Screen() {
 
 
             setIsFlexBuzz(false);
-            setScreenState(2)
+            setScreenState(2);
+
+
+
+          if(audioOn){
+          
+            clockNoise.loop = true;
+            clockNoise.volume = 0.05
+            clockNoise.play();
+          }
 
         }, 1500); 
 
@@ -44,6 +76,14 @@ function Screen() {
 
     const correctAnimation = (buzzUser) => {
 
+      if(audioOn){
+
+    
+        correctNoise.play();
+        clockNoise.pause();
+
+ 
+      }
        
 
         setIsFlexCorrect((prevIsFlex) => !prevIsFlex)
@@ -61,7 +101,13 @@ function Screen() {
 
     const incorrectAnimation = (buzzUser) => {
 
-       
+      if(audioOn){
+
+      
+        incorrectNoise.play();
+        clockNoise.pause();
+      }
+     
 
         setIsFlexIncorrect((prevIsFlex) => !prevIsFlex)
 
@@ -75,6 +121,10 @@ function Screen() {
 
     
     }
+
+    
+
+    
 
     useEffect(() => {
 
@@ -130,26 +180,34 @@ function Screen() {
       }
       else if(command === "setQuestionAndAnswer"){
 
-        setQuestion(payload.questionAnswer[0])
+        setQuestion(payload.questionAnswer[0]);
+        setAnswer(payload.questionAnswer[1]);
     
       }
       else if(command === "revealQuestion"){
 
         setScreenState(1);
+
+        if(audioOn){
+
+          revealNoise.volume = 0.05;
+          revealNoise.playbackRate = 2.5;
+          revealNoise.play();
+        }
       }
       else if(command === "buzz"){
 
-        buzzAnimation(payload.buzzUser);
+        buzzAnimation(payload.buzzUser, audioOn);
       }
       else if(command === "correct"){
 
-        correctAnimation(payload.buzzUser);
+        correctAnimation(payload.buzzUser, audioOn);
 
         setPlayerScores(payload.playerScores);
       }
       else if(command === "incorrect"){
 
-        incorrectAnimation(payload.buzzUser);
+        incorrectAnimation(payload.buzzUser, audioOn);
 
         setPlayerScores(payload.playerScores);
       }
@@ -162,13 +220,19 @@ function Screen() {
         navigate('/EndScreen', { state: {roomKey: roomKey, isScreen:isScreen}})
       }
       
-  
+    }
 
-  
-        
-  
-  
-      
+    const enableMusic = () => {
+
+ 
+      audioOn = true;
+
+      if(audioOn){
+        musicNoise.loop = true;
+        musicNoise.volume = 0.01;
+        musicNoise.play();
+      }
+
     }
    
 
@@ -178,7 +242,7 @@ function Screen() {
 
   return (
 
-      <div id="screenMainDiv">
+      <div id="screenMainDiv" onClick = {enableMusic}>
 
           <h1 id="screenTitle">Fact Frenzy</h1>
 

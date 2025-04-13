@@ -63,6 +63,9 @@
         width: 95%;
         font-size: 7rem;
         margin-top: 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         text-align: center;
     }
 
