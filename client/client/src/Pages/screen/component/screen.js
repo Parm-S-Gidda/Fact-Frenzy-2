@@ -2,6 +2,8 @@ import '../styles/screen.css';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useWebSocket } from '../../../webSocket.js';
+import PreviousAnswer from './previousAnswer.js';
+import { useRef } from 'react';
 
 
 
@@ -21,6 +23,11 @@ function Screen() {
     const navigate = useNavigate(0);
     const [question, setQuestion] = useState("");
     const [userBuzzed, setUserBuzzed] = useState("");
+    const [previousAnswer, setPreviousAnswer] = useState("")
+    const [displayPreviousAnswer, setDisplayPreviousAnswer] = useState(false)
+    const answerRef = useRef("");
+
+
     
   
 
@@ -53,11 +60,14 @@ function Screen() {
 
             setIsFlexCorrect(false);
             setScreenState(0)
+            setDisplayPreviousAnswer(true)
 
         }, 1500); 
 
         
     }
+
+
 
     const incorrectAnimation = (buzzUser) => {
 
@@ -70,6 +80,8 @@ function Screen() {
 
             setIsFlexIncorrect(false);
             setScreenState(0)
+            setDisplayPreviousAnswer(true)
+
 
         }, 1500); 
 
@@ -130,14 +142,19 @@ function Screen() {
       }
       else if(command === "setQuestionAndAnswer"){
 
-        setQuestion(payload.questionAnswer[0])
+        setQuestion(payload.questionAnswer[0]);
+
+        answerRef.current = payload.questionAnswer[1];
     
       }
       else if(command === "revealQuestion"){
 
+   
+
         setScreenState(1);
       }
       else if(command === "buzz"){
+
 
         buzzAnimation(payload.buzzUser);
       }
@@ -146,12 +163,16 @@ function Screen() {
         correctAnimation(payload.buzzUser);
 
         setPlayerScores(payload.playerScores);
+
+
+        setPreviousAnswer(answerRef.current);
       }
       else if(command === "incorrect"){
 
         incorrectAnimation(payload.buzzUser);
 
         setPlayerScores(payload.playerScores);
+        setPreviousAnswer(answerRef.current);
       }
       else if(command === "continue"){
 
@@ -237,6 +258,8 @@ function Screen() {
             <div id="incorrectDiv" >INCORRECT</div>
 
         </div>
+
+        {displayPreviousAnswer && <PreviousAnswer setDisplayPreviousAnswer={setDisplayPreviousAnswer} previousAnswer={previousAnswer}></PreviousAnswer>}
 
        
 
