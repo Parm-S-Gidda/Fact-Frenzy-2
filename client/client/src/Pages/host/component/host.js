@@ -57,36 +57,35 @@ function Host() {
     }
 
     //Give buzzed user a point and return to wait for display answer screen
-    const handleCorrectClicked = () => {
-
-        let payload = {
-
-            host: userBuzzed,
-            roomKey: roomKey
-            
-          }
-
-        stompClient.send('/app/' + roomKey + "/correctClicked", {}, JSON.stringify(payload));
-        stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
-
-        setHostState(0)
-    }
-
-    //Remove point from buzzed user and return to wait for display answer screen
-    const handleIncorrectClicked = () => {
-
-        let payload = {
-
-            host: userBuzzed,
-            roomKey: roomKey
-            
-          }
-
-        stompClient.send('/app/' + roomKey + "/incorrectClicked", {}, JSON.stringify(payload));
-        stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
-
-        setHostState(0)
-    }
+    const handleCorrectClicked = async () => {
+      const payload = {
+        host: userBuzzed,
+        roomKey: roomKey
+      };
+    
+      stompClient.send('/app/' + roomKey + "/correctClicked", {}, JSON.stringify(payload));
+    
+      await new Promise(resolve => setTimeout(resolve, 1500)); // wait 1.5 seconds
+    
+      stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
+    
+      setHostState(0);
+    };
+    
+    const handleIncorrectClicked = async () => {
+      const payload = {
+        host: userBuzzed,
+        roomKey: roomKey
+      };
+    
+      stompClient.send('/app/' + roomKey + "/incorrectClicked", {}, JSON.stringify(payload));
+    
+      await new Promise(resolve => setTimeout(resolve, 1500)); // wait 1.5 seconds
+    
+      stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
+    
+      setHostState(0);
+    };
 
     //return to wait for display answer screen
     const handleContinueClicked = () => {

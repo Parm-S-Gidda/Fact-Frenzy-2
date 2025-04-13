@@ -164,4 +164,65 @@
 
 }
 
+@keyframes slideInPauseOut {
+    0% {
+      transform: translateX(-150vw); /* Start far off screen */
+    }
+    40% {
+      transform: translateX(-50%); /* Centered using current left: 50% */
+    }
+    60% {
+      transform: translateX(-50%); /* Pause at center */
+    }
+    100% {
+      transform: translateX(150vw); /* Exit off screen right */
+    }
+  }
+
+
+#previousAnswerMainDiv{
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: white;
+    padding: 0rem 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 15px;
+    border: 5px solid rgb(214, 53, 53);
+    animation: slideInPauseOut 5s ease-in-out ;
+    opacity: 1;
+
+}
+
+#previousAnswerText{
+    color: black;
+}
+
+@keyframes fadeInOutFilter {
+  0% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  50% {
+    background-color: rgba(0, 0, 0, 0.716);
+  }
+
+  70% {
+    background-color: rgba(0, 0, 0, 0.716);
+  }
+
+  100% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+#previousAnswerDarkBackground{
+    
+    animation: fadeInOutFilter 4s ease-in-out ;
+    width: 100vw;
+    height: 100vh;
+
+    position: fixed;
+    z-index: 999;
+}
 

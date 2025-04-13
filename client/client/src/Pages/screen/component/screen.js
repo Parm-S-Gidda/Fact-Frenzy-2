@@ -8,6 +8,8 @@ import dingSound from '../../../sounds/ding.wav';
 import musicSound from '../../../sounds/music.mp3';
 import clockSound from '../../../sounds/clock.wav';
 import revealSound from '../../../sounds/reveal.wav';
+import PreviousAnswer from './previousAnswer.js';
+import { useRef } from 'react';
 
 
 
@@ -35,6 +37,13 @@ function Screen() {
     const clockNoise = new Audio(clockSound);  
     const revealNoise = new Audio(revealSound);  
     let audioOn = useRef(false);
+    const [previousAnswer, setPreviousAnswer] = useState("")
+    const [displayPreviousAnswer, setDisplayPreviousAnswer] = useState(false)
+    const answerRef = useRef("");
+
+
+    
+  
 
 
     const buzzAnimation = (buzzUser) => {
@@ -93,11 +102,14 @@ function Screen() {
 
             setIsFlexCorrect(false);
             setScreenState(0)
+            setDisplayPreviousAnswer(true)
 
         }, 1500); 
 
         
     }
+
+
 
     const incorrectAnimation = (buzzUser) => {
 
@@ -116,6 +128,8 @@ function Screen() {
 
             setIsFlexIncorrect(false);
             setScreenState(0)
+            setDisplayPreviousAnswer(true)
+
 
         }, 1500); 
 
@@ -181,10 +195,13 @@ function Screen() {
       else if(command === "setQuestionAndAnswer"){
 
         setQuestion(payload.questionAnswer[0]);
-        setAnswer(payload.questionAnswer[1]);
+
+        answerRef.current = payload.questionAnswer[1];
     
       }
       else if(command === "revealQuestion"){
+
+   
 
         setScreenState(1);
 
@@ -204,12 +221,16 @@ function Screen() {
         correctAnimation(payload.buzzUser, audioOn);
 
         setPlayerScores(payload.playerScores);
+
+
+        setPreviousAnswer(answerRef.current);
       }
       else if(command === "incorrect"){
 
         incorrectAnimation(payload.buzzUser, audioOn);
 
         setPlayerScores(payload.playerScores);
+        setPreviousAnswer(answerRef.current);
       }
       else if(command === "continue"){
 
@@ -301,6 +322,8 @@ function Screen() {
             <div id="incorrectDiv" >INCORRECT</div>
 
         </div>
+
+        {displayPreviousAnswer && <PreviousAnswer setDisplayPreviousAnswer={setDisplayPreviousAnswer} previousAnswer={previousAnswer}></PreviousAnswer>}
 
        
 
