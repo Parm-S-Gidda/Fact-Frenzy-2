@@ -1,5 +1,5 @@
 import '../styles/host.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation, data  } from 'react-router-dom';
 import { useWebSocket } from '../../../webSocket.js';
 
@@ -14,6 +14,9 @@ function Host() {
     const { stompClient} = useWebSocket();
     const [userBuzzed, setUserBuzzed] = useState("");
     const [gameEnd, setGameEnd] = useState(false);
+    const answerRef = useRef("");
+    const [buttonDisable, setButtonDisable] = useState(false);
+      const [previousAnswer, setPreviousAnswer] = useState("")
 
     const {roomKey, userName} = location.state || {};
 
@@ -62,6 +65,8 @@ function Host() {
         host: userBuzzed,
         roomKey: roomKey
       };
+
+      setPreviousAnswer(answerRef.current)
     
       stompClient.send('/app/' + roomKey + "/correctClicked", {}, JSON.stringify(payload));
     
@@ -70,6 +75,14 @@ function Host() {
       stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
     
       setHostState(0);
+
+      setButtonDisable(true)
+
+      await new Promise(resolve => setTimeout(resolve, 3000)); 
+
+      setButtonDisable(false)
+
+
     };
     
     const handleIncorrectClicked = async () => {
@@ -78,6 +91,7 @@ function Host() {
         roomKey: roomKey
       };
     
+      setPreviousAnswer(answerRef.current)
       stompClient.send('/app/' + roomKey + "/incorrectClicked", {}, JSON.stringify(payload));
     
       await new Promise(resolve => setTimeout(resolve, 1500)); // wait 1.5 seconds
@@ -85,7 +99,15 @@ function Host() {
       stompClient.send('/app/' + roomKey + "/answersAndQuestions", {}, JSON.stringify(payload));
     
       setHostState(0);
+
+      setButtonDisable(true)
+
+      await new Promise(resolve => setTimeout(resolve, 2500)); 
+
+      setButtonDisable(false)
     };
+
+  
 
     //return to wait for display answer screen
     const handleContinueClicked = () => {
@@ -157,6 +179,7 @@ function Host() {
 
         setQuestion(payload.questionAnswer[0])
         setAnswer(payload.questionAnswer[1])
+        answerRef.current = payload.questionAnswer[1];
 
       }
       else if(command === "buzz"){
@@ -192,9 +215,13 @@ function Host() {
                 <h1 id='nextQuestionPreview'>Next Question Preview:</h1>
                 <h1 id='nextQuestion'>{question}</h1> 
             </div>
+
+       { previousAnswer.trim() != "" &&    <div id="previewDiv">
+            <h1 id='nextQuestionPreview'>Previous Answer: {previousAnswer}</h1>
+            </div>}
     
 
-            <button id="revealNextQuestionButton" onClick={handleRevealClicked}>Reveal To Players</button>
+            <button className={buttonDisable ? "revealNextQuestionButton disabled" : "revealNextQuestionButton"} onClick={handleRevealClicked}>Reveal To Players</button>
         </>
         }
 
@@ -206,7 +233,7 @@ function Host() {
             </div>
     
 
-            <button id="revealNextQuestionButton" onClick={handleSkipClicked}>Skip</button>
+            <button className="revealNextQuestionButton" onClick={handleSkipClicked}>Skip</button>
         </>
         }
         {hostState === 2 && 
@@ -256,7 +283,7 @@ function Host() {
             </div>
     
 
-            <button id="revealNextQuestionButton" onClick={handleWinnerClicked}>Reveal Winner</button>
+            <button className="revealNextQuestionButton" onClick={handleWinnerClicked}>Reveal Winner</button>
         </>
         }
         

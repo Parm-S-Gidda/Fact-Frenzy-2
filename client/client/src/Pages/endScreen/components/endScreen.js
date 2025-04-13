@@ -2,6 +2,9 @@ import '../styles/endScreen.css';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation, data  } from 'react-router-dom';
 import { useWebSocket } from '../../../webSocket.js';
+import winSound from '../../../sounds/win.wav';
+import { useRef } from 'react';
+ 
 
 
 
@@ -15,12 +18,16 @@ function EndScreen() {
     const navigate = useNavigate(0);
     const [winner, setWinner] = useState("");
     const [scores, setScores] = useState([]);
+    const winNoise = useRef(new Audio(winSound));
 
     const leaveClicked = () => {
 
         if(isScreen){
+          winNoise.current.pause();
+          winNoise.current.currentTime = 0;
 
             let payload = {
+
 
                 host: "N/A",
                 roomKey: roomKey
@@ -28,6 +35,7 @@ function EndScreen() {
               }
 
             stompClient.send('/app/' + roomKey + "/screenLeft", {}, JSON.stringify(payload));
+         
         }
 
         navigate('/')
@@ -87,6 +95,17 @@ function EndScreen() {
   
    
     }
+
+    useEffect(() => {
+
+      if(isScreen){
+        winNoise.current.loop = true;
+        winNoise.current.volume = 0.05;
+        winNoise.current.play();
+      }
+  
+      
+    }, [])
 
 
 

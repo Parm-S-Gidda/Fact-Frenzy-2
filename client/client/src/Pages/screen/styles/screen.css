@@ -190,7 +190,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     border-radius: 15px;
     border: 5px solid rgb(214, 53, 53);
-    animation: slideInPauseOut 5s ease-in-out ;
+    animation: slideInPauseOut 4s ease-in-out ;
     opacity: 1;
 
 }
@@ -218,7 +218,7 @@
 
 #previousAnswerDarkBackground{
     
-    animation: fadeInOutFilter 4s ease-in-out ;
+    animation: fadeInOutFilter 3s ease-in-out ;
     width: 100vw;
     height: 100vh;
 

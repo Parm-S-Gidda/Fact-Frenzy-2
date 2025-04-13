@@ -9,7 +9,7 @@ import musicSound from '../../../sounds/music.mp3';
 import clockSound from '../../../sounds/clock.wav';
 import revealSound from '../../../sounds/reveal.wav';
 import PreviousAnswer from './previousAnswer.js';
-import { useRef } from 'react';
+
 
 
 
@@ -28,13 +28,12 @@ function Screen() {
     const { stompClient} = useWebSocket();
     const navigate = useNavigate(0);
     const [question, setQuestion] = useState("");
-    const [answer, setAnswer] = useState("");
     const [userBuzzed, setUserBuzzed] = useState("");
     const correctNoise = new Audio(correctSound);  
     const incorrectNoise = new Audio(incorrectSound);  
     const dingNoise = new Audio(dingSound);  
-    const musicNoise = new Audio(musicSound); 
-    const clockNoise = new Audio(clockSound);  
+    const musicNoise = useRef(new Audio(musicSound));
+    const clockNoise = useRef(new Audio(clockSound)); 
     const revealNoise = new Audio(revealSound);  
     let audioOn = useRef(false);
     const [previousAnswer, setPreviousAnswer] = useState("")
@@ -50,7 +49,7 @@ function Screen() {
 
    
 
-        if(audioOn){
+        if(audioOn.current){
 
 
      
@@ -71,11 +70,11 @@ function Screen() {
 
 
 
-          if(audioOn){
-          
-            clockNoise.loop = true;
-            clockNoise.volume = 0.05
-            clockNoise.play();
+          if(audioOn.current){
+            
+            clockNoise.current.loop = true;
+            clockNoise.current.volume = 0.05;
+            clockNoise.current.play();
           }
 
         }, 1500); 
@@ -85,11 +84,12 @@ function Screen() {
 
     const correctAnimation = (buzzUser) => {
 
-      if(audioOn){
+      if(audioOn.current){
 
     
         correctNoise.play();
-        clockNoise.pause();
+        clockNoise.current.pause();
+        clockNoise.current.currentTime = 0;
 
  
       }
@@ -113,11 +113,12 @@ function Screen() {
 
     const incorrectAnimation = (buzzUser) => {
 
-      if(audioOn){
+      if(audioOn.current){
 
       
         incorrectNoise.play();
-        clockNoise.pause();
+        clockNoise.current.pause();
+clockNoise.current.currentTime = 0;
       }
      
 
@@ -205,7 +206,7 @@ function Screen() {
 
         setScreenState(1);
 
-        if(audioOn){
+        if(audioOn.current){
 
           revealNoise.volume = 0.05;
           revealNoise.playbackRate = 2.5;
@@ -238,6 +239,8 @@ function Screen() {
       }
       else if(command === "endGame"){
 
+        musicNoise.current.pause();
+
         navigate('/EndScreen', { state: {roomKey: roomKey, isScreen:isScreen}})
       }
       
@@ -246,12 +249,14 @@ function Screen() {
     const enableMusic = () => {
 
  
-      audioOn = true;
+      audioOn.current = true;
 
-      if(audioOn){
-        musicNoise.loop = true;
-        musicNoise.volume = 0.01;
-        musicNoise.play();
+      if (audioOn.current) {
+        musicNoise.current.loop = true;
+        musicNoise.current.volume = 0.05;
+        if (musicNoise.current.paused) {
+          musicNoise.current.play();
+        }
       }
 
     }

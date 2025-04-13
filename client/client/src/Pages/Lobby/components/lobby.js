@@ -19,16 +19,7 @@ function Lobby() {
 
       try {
 
-       /* const response = await fetch('https://fact-frenzy-service-993031554602.us-west1.run.app/' + roomKey + '/removeUser', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ roomKey: roomKey, userName: userName }),
-        }); */
-
-        
-        const response = await fetch('http://localhost:8080/' + roomKey + '/removeUser', {
+        const response = await fetch('https://fact-frenzy-service-993031554602.us-west1.run.app/' + roomKey + '/removeUser', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -36,6 +27,15 @@ function Lobby() {
           body: JSON.stringify({ roomKey: roomKey, userName: userName }),
         }); 
 
+        /*
+        const response = await fetch('http://localhost:8080/' + roomKey + '/removeUser', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ roomKey: roomKey, userName: userName }),
+        }); */
+ 
         if (!response.ok) {
           alert("Could not leave game, please try again");
           return;

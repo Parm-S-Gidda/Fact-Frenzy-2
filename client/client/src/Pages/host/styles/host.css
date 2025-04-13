@@ -11,7 +11,7 @@
     margin-top: 2%;
 }
 
-#revealNextQuestionButton{
+.revealNextQuestionButton{
   
     
     font-size: 2rem;
@@ -27,10 +27,15 @@
     color: white;
 }
 
-#revealNextQuestionButton:hover{
+.revealNextQuestionButton:hover{
 
     transform: scale(1.05);
     background-color: rgb(217, 84, 84);
+}
+
+.disabled{
+    background-color: rgb(139, 126, 126);
+    pointer-events: none;
 }
 
 #nextQuestionPreview{
@@ -193,3 +198,5 @@
         font-size: 1.5rem;
     }
 }
+
+
