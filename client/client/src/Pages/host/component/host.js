@@ -47,6 +47,8 @@ function Host() {
     //Display answer + no one gets a point
     const handleSkipClicked = () => {
 
+      setPreviousAnswer(answerRef.current)
+
         let payload = {
 
             host: userBuzzed,
