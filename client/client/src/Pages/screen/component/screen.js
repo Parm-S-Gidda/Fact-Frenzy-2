@@ -329,6 +329,9 @@ clockNoise.current.currentTime = 0;
         </div>
 
         {displayPreviousAnswer && <PreviousAnswer setDisplayPreviousAnswer={setDisplayPreviousAnswer} previousAnswer={previousAnswer}></PreviousAnswer>}
+        <div id="clickScreenDiv"> 
+          <h1 id="clickScreenText">Click the screen for audio</h1>
+        </div>
 
        
 

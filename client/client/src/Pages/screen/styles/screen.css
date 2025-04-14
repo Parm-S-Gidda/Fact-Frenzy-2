@@ -226,3 +226,40 @@
     z-index: 999;
 }
 
+@keyframes pulseFadeUp {
+  0%   { transform: scale(1) translateY(0);       opacity: 1; }
+  10%  { transform: scale(1.05) translateY(-0.5%);  opacity: 1; }
+  20%  { transform: scale(0.95) translateY(-1%);   opacity: 1; }
+  30%  { transform: scale(1.05) translateY(-1.5%);  opacity: 1; }
+  40%  { transform: scale(0.95) translateY(-2%);   opacity: 1; }
+  50%  { transform: scale(1.05) translateY(-2.5%);  opacity: 1; }
+  60%  { transform: scale(0.95) translateY(-3%);   opacity: 1; }
+  70%  { transform: scale(1.05) translateY(-3.5%);  opacity: 1; }
+  80%  { transform: scale(0.95) translateY(-4%);   opacity: 1; }
+  90%  { transform: scale(1.02) translateY(-4.5%);  opacity: 0.5; }
+  100% { transform: scale(1) translateY(-5%);     opacity: 0; }
+}
+
+
+#clickScreenDiv{
+
+  position: fixed;
+  top: 25%;
+  left: 2rem;
+  background-color: rgb(220, 80, 80);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  animation: pulseFadeUp 3s ease-in-out forwards;
+  color: white;
+  border-radius: 0.5rem;
+  border: solid 5px rgb(0, 0, 0);
+  
+}
+
+#clickScreenText{
+
+  margin: 0;
+  font-size: 1.5rem;
+
+}
+
