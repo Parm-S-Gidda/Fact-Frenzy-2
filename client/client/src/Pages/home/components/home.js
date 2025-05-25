@@ -9,6 +9,8 @@ function Home() {
     const [inputValue, setInputValue] = useState("")
     const navigate = useNavigate();
     let lobbyInput = 0
+    const API_BASE = process.env.REACT_APP_API_BASE;
+
  
 
     //displays pop up 
@@ -39,8 +41,8 @@ function Home() {
 
       try { 
 
-        const response = await fetch(`https://fact-frenzy-service-993031554602.us-west1.run.app/joinLobby?key=${lobbyInput}`);
-        //const response = await fetch(`http://localhost:8080/joinLobby?key=${lobbyInput}`);
+        const response = await fetch(`${API_BASE}/joinLobby?key=${lobbyInput}`);
+
 
         if( !response.ok){
             alert("Could not join game, please try again later")
@@ -74,8 +76,8 @@ function Home() {
         
         try { 
 
-            const response = await fetch("https://fact-frenzy-service-993031554602.us-west1.run.app/createRoom")
-           // const response = await fetch("http://localhost:8080/createRoom")
+            const response = await fetch(`${API_BASE}/createRoom`);
+          
 
             if( !response.ok){
                 alert("Could not make lobby, please try again later")

@@ -7,8 +7,11 @@ const WebSocketContext = createContext();
 export const WebSocketProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
 
-  const url = 'https://fact-frenzy-service-993031554602.us-west1.run.app/connect';
-  //const url ='http://localhost:8080/connect';
+  const API_BASE = process.env.REACT_APP_API_BASE;
+
+
+
+  const url = `${API_BASE}/connect`;
 
   useEffect(() => {
     let socket, stomp;
